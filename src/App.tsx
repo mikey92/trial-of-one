@@ -42,10 +42,11 @@ export function App() {
 
   let view;
   if (route === "/new") view = <NewTrial onCreated={(t) => go(`/trial/${t.id}`)} />;
-  else if (route === "/demo") view = <TrialView trial={demoTrial()} onChange={async () => {}} readOnly />;
+  // Keyed by trial, so leaving a trial mid-capture never carries its camera or retake prompt into another.
+  else if (route === "/demo") view = <TrialView key="demo" trial={demoTrial()} onChange={async () => {}} readOnly />;
   else if (route === "/study") view = <Study />;
   else if (route === "/routine") view = <Routine />;
-  else if (id) view = current ? <TrialView trial={current} onChange={update} /> : <p className="muted" role="status">Loading the trial…</p>;
+  else if (id) view = current ? <TrialView key={current.id} trial={current} onChange={update} /> : <p className="muted" role="status">Loading the trial…</p>;
   else view = <Home trials={trials} />;
 
   return (
