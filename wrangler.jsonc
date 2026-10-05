@@ -15,8 +15,9 @@
     // Weekly notes written by the model per visitor per minute; past this, the template writes them.
     { "name": "NOTE_LIMIT", "namespace_id": "5102", "simple": { "limit": 6, "period": 60 } }
   ],
-  // Each HD analysis of 9-12 concerns costs 20 units; the floor keeps some for the demo video.
-  "vars": { "DAILY_ANALYSES": "10", "UNIT_FLOOR": "100" },
+  // Each HD analysis of 9-12 concerns costs 20 units. A small daily cap spreads what is left of the
+  // hackathon's units over the judging weeks; the floor keeps one analysis in reserve.
+  "vars": { "DAILY_ANALYSES": "3", "UNIT_FLOOR": "20" },
   "observability": { "enabled": true }
   // Secrets: YOUCAM_API_KEY, LLM_RELAY_URL, LLM_RELAY_KEY
 }
