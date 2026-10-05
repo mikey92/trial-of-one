@@ -8,3 +8,4 @@ dist/
 .venv*/
 faces/perturbed/
 study/cache/raw_*
+__pycache__/

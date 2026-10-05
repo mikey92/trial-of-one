@@ -1,0 +1,2023 @@
+{
+ "summary": {
+  "faces": 6,
+  "scans": 24,
+  "edits": [
+   "15% darker",
+   "15% brighter",
+   "warmer light",
+   "cooler light",
+   "tilted 3\u00b0",
+   "closer framing",
+   "heavier JPEG",
+   "slightly soft focus"
+  ],
+  "facesPerEdit": {
+   "15% darker": 2,
+   "15% brighter": 1,
+   "warmer light": 2,
+   "cooler light": 1,
+   "tilted 3\u00b0": 3,
+   "closer framing": 3,
+   "heavier JPEG": 3,
+   "slightly soft focus": 3
+  },
+  "rejected": [
+   "slightly soft focus"
+  ],
+  "noise": {
+   "wrinkle": {
+    "capture": 0.54,
+    "day": 3.0
+   },
+   "texture": {
+    "capture": 0.92,
+    "day": 3.0
+   },
+   "pore": {
+    "capture": 1.77,
+    "day": 3.0
+   },
+   "acne": {
+    "capture": 1.68,
+    "day": 3.0
+   },
+   "redness": {
+    "capture": 0.77,
+    "day": 3.0
+   },
+   "oiliness": {
+    "capture": 1.22,
+    "day": 3.0
+   },
+   "moisture": {
+    "capture": 0.5,
+    "day": 3.0
+   },
+   "radiance": {
+    "capture": 0.5,
+    "day": 3.0
+   },
+   "age_spot": {
+    "capture": 0.5,
+    "day": 3.0
+   },
+   "dark_circle": {
+    "capture": 0.5,
+    "day": 3.0
+   },
+   "eye_bag": {
+    "capture": 0.5,
+    "day": 3.0
+   },
+   "firmness": {
+    "capture": 0.5,
+    "day": 3.0
+   }
+  },
+  "rows": [
+   {
+    "concern": "texture",
+    "capture": 0.92,
+    "unchecked": 3.48,
+    "day": 3.0,
+    "byEdit": {
+     "15% darker": 0.5,
+     "15% brighter": 0,
+     "warmer light": 0.5,
+     "cooler light": 3,
+     "tilted 3\u00b0": 0.67,
+     "closer framing": 1,
+     "heavier JPEG": 1,
+     "slightly soft focus": 8.67
+    }
+   },
+   {
+    "concern": "pore",
+    "capture": 1.77,
+    "unchecked": 2.28,
+    "day": 3.0,
+    "byEdit": {
+     "15% darker": 0,
+     "15% brighter": 0,
+     "warmer light": -1,
+     "cooler light": -2,
+     "tilted 3\u00b0": -2.67,
+     "closer framing": -1,
+     "heavier JPEG": 0,
+     "slightly soft focus": 2.67
+    }
+   },
+   {
+    "concern": "acne",
+    "capture": 1.68,
+    "unchecked": 1.71,
+    "day": 3.0,
+    "byEdit": {
+     "15% darker": 0,
+     "15% brighter": -3,
+     "warmer light": -1.5,
+     "cooler light": 0,
+     "tilted 3\u00b0": -1.33,
+     "closer framing": 0,
+     "heavier JPEG": 3.33,
+     "slightly soft focus": 1
+    }
+   },
+   {
+    "concern": "oiliness",
+    "capture": 1.22,
+    "unchecked": 1.14,
+    "day": 3.0,
+    "byEdit": {
+     "15% darker": 0,
+     "15% brighter": 0,
+     "warmer light": 1,
+     "cooler light": 0,
+     "tilted 3\u00b0": -0.33,
+     "closer framing": -0.33,
+     "heavier JPEG": 1.33,
+     "slightly soft focus": 1
+    }
+   },
+   {
+    "concern": "moisture",
+    "capture": 0.43,
+    "unchecked": 0.82,
+    "day": 3.0,
+    "byEdit": {
+     "15% darker": 0.5,
+     "15% brighter": 0,
+     "warmer light": 0,
+     "cooler light": 0,
+     "tilted 3\u00b0": 0,
+     "closer framing": 0.33,
+     "heavier JPEG": 0,
+     "slightly soft focus": 2
+    }
+   },
+   {
+    "concern": "wrinkle",
+    "capture": 0.54,
+    "unchecked": 0.79,
+    "day": 3.0,
+    "byEdit": {
+     "15% darker": 0.5,
+     "15% brighter": 0,
+     "warmer light": 0.5,
+     "cooler light": 0,
+     "tilted 3\u00b0": 0,
+     "closer framing": -0.33,
+     "heavier JPEG": 1,
+     "slightly soft focus": 1
+    }
+   },
+   {
+    "concern": "age_spot",
+    "capture": 0.39,
+    "unchecked": 0.77,
+    "day": 3.0,
+    "byEdit": {
+     "15% darker": 0,
+     "15% brighter": 0,
+     "warmer light": 0.5,
+     "cooler light": 0,
+     "tilted 3\u00b0": 0.33,
+     "closer framing": 0.33,
+     "heavier JPEG": 0.33,
+     "slightly soft focus": -1
+    }
+   },
+   {
+    "concern": "redness",
+    "capture": 0.77,
+    "unchecked": 0.72,
+    "day": 3.0,
+    "byEdit": {
+     "15% darker": 1,
+     "15% brighter": 0,
+     "warmer light": 0,
+     "cooler light": -1,
+     "tilted 3\u00b0": -0.67,
+     "closer framing": 0.33,
+     "heavier JPEG": -0.33,
+     "slightly soft focus": 0
+    }
+   },
+   {
+    "concern": "radiance",
+    "capture": 0.43,
+    "unchecked": 0.42,
+    "day": 3.0,
+    "byEdit": {
+     "15% darker": -0.5,
+     "15% brighter": 0,
+     "warmer light": 0.5,
+     "cooler light": -1,
+     "tilted 3\u00b0": 0,
+     "closer framing": 0,
+     "heavier JPEG": -0.33,
+     "slightly soft focus": 0.33
+    }
+   },
+   {
+    "concern": "firmness",
+    "capture": 0.38,
+    "unchecked": 0.41,
+    "day": 3.0,
+    "byEdit": {
+     "15% darker": 0,
+     "15% brighter": 0,
+     "warmer light": 0,
+     "cooler light": -1,
+     "tilted 3\u00b0": 0.33,
+     "closer framing": -0.33,
+     "heavier JPEG": 0,
+     "slightly soft focus": -0.33
+    }
+   },
+   {
+    "concern": "dark_circle",
+    "capture": 0.31,
+    "unchecked": 0.35,
+    "day": 3.0,
+    "byEdit": {
+     "15% darker": -0.5,
+     "15% brighter": 0,
+     "warmer light": -0.5,
+     "cooler light": 0,
+     "tilted 3\u00b0": 0,
+     "closer framing": 0,
+     "heavier JPEG": 0,
+     "slightly soft focus": -0.33
+    }
+   },
+   {
+    "concern": "eye_bag",
+    "capture": 0.33,
+    "unchecked": 0.31,
+    "day": 3.0,
+    "byEdit": {
+     "15% darker": 0,
+     "15% brighter": 0,
+     "warmer light": -0.5,
+     "cooler light": 0,
+     "tilted 3\u00b0": 0,
+     "closer framing": 0,
+     "heavier JPEG": 0.33,
+     "slightly soft focus": -0.33
+    }
+   }
+  ],
+  "naive": {
+   "concern": "texture",
+   "before": 67,
+   "after": 81,
+   "edit": "slightly soft focus"
+  }
+ },
+ "rows": [
+  [
+   "face_01",
+   "as generated",
+   "eye_bag",
+   76
+  ],
+  [
+   "face_01",
+   "as generated",
+   "dark_circle",
+   79
+  ],
+  [
+   "face_01",
+   "as generated",
+   "firmness",
+   92
+  ],
+  [
+   "face_01",
+   "as generated",
+   "age_spot",
+   98
+  ],
+  [
+   "face_01",
+   "as generated",
+   "radiance",
+   97
+  ],
+  [
+   "face_01",
+   "as generated",
+   "redness",
+   66
+  ],
+  [
+   "face_01",
+   "as generated",
+   "oiliness",
+   88
+  ],
+  [
+   "face_01",
+   "as generated",
+   "moisture",
+   83
+  ],
+  [
+   "face_01",
+   "as generated",
+   "acne",
+   91
+  ],
+  [
+   "face_01",
+   "as generated",
+   "texture",
+   98
+  ],
+  [
+   "face_01",
+   "as generated",
+   "pore",
+   97
+  ],
+  [
+   "face_01",
+   "as generated",
+   "wrinkle",
+   80
+  ],
+  [
+   "face_01",
+   "15% darker",
+   "eye_bag",
+   76
+  ],
+  [
+   "face_01",
+   "15% darker",
+   "dark_circle",
+   78
+  ],
+  [
+   "face_01",
+   "15% darker",
+   "firmness",
+   92
+  ],
+  [
+   "face_01",
+   "15% darker",
+   "redness",
+   67
+  ],
+  [
+   "face_01",
+   "15% darker",
+   "radiance",
+   97
+  ],
+  [
+   "face_01",
+   "15% darker",
+   "age_spot",
+   98
+  ],
+  [
+   "face_01",
+   "15% darker",
+   "oiliness",
+   88
+  ],
+  [
+   "face_01",
+   "15% darker",
+   "moisture",
+   83
+  ],
+  [
+   "face_01",
+   "15% darker",
+   "acne",
+   91
+  ],
+  [
+   "face_01",
+   "15% darker",
+   "texture",
+   98
+  ],
+  [
+   "face_01",
+   "15% darker",
+   "pore",
+   99
+  ],
+  [
+   "face_01",
+   "15% darker",
+   "wrinkle",
+   80
+  ],
+  [
+   "face_01",
+   "tilted 3\u00b0",
+   "eye_bag",
+   77
+  ],
+  [
+   "face_01",
+   "tilted 3\u00b0",
+   "dark_circle",
+   79
+  ],
+  [
+   "face_01",
+   "tilted 3\u00b0",
+   "radiance",
+   97
+  ],
+  [
+   "face_01",
+   "tilted 3\u00b0",
+   "redness",
+   66
+  ],
+  [
+   "face_01",
+   "tilted 3\u00b0",
+   "firmness",
+   92
+  ],
+  [
+   "face_01",
+   "tilted 3\u00b0",
+   "oiliness",
+   85
+  ],
+  [
+   "face_01",
+   "tilted 3\u00b0",
+   "age_spot",
+   98
+  ],
+  [
+   "face_01",
+   "tilted 3\u00b0",
+   "moisture",
+   84
+  ],
+  [
+   "face_01",
+   "tilted 3\u00b0",
+   "acne",
+   91
+  ],
+  [
+   "face_01",
+   "tilted 3\u00b0",
+   "texture",
+   98
+  ],
+  [
+   "face_01",
+   "tilted 3\u00b0",
+   "pore",
+   98
+  ],
+  [
+   "face_01",
+   "tilted 3\u00b0",
+   "wrinkle",
+   80
+  ],
+  [
+   "face_01",
+   "heavier JPEG",
+   "eye_bag",
+   77
+  ],
+  [
+   "face_01",
+   "heavier JPEG",
+   "dark_circle",
+   79
+  ],
+  [
+   "face_01",
+   "heavier JPEG",
+   "redness",
+   66
+  ],
+  [
+   "face_01",
+   "heavier JPEG",
+   "firmness",
+   92
+  ],
+  [
+   "face_01",
+   "heavier JPEG",
+   "oiliness",
+   91
+  ],
+  [
+   "face_01",
+   "heavier JPEG",
+   "radiance",
+   97
+  ],
+  [
+   "face_01",
+   "heavier JPEG",
+   "age_spot",
+   98
+  ],
+  [
+   "face_01",
+   "heavier JPEG",
+   "moisture",
+   83
+  ],
+  [
+   "face_01",
+   "heavier JPEG",
+   "acne",
+   93
+  ],
+  [
+   "face_01",
+   "heavier JPEG",
+   "texture",
+   98
+  ],
+  [
+   "face_01",
+   "heavier JPEG",
+   "pore",
+   97
+  ],
+  [
+   "face_01",
+   "heavier JPEG",
+   "wrinkle",
+   81
+  ],
+  [
+   "face_02",
+   "as generated",
+   "eye_bag",
+   71
+  ],
+  [
+   "face_02",
+   "as generated",
+   "oiliness",
+   71
+  ],
+  [
+   "face_02",
+   "as generated",
+   "radiance",
+   79
+  ],
+  [
+   "face_02",
+   "as generated",
+   "redness",
+   70
+  ],
+  [
+   "face_02",
+   "as generated",
+   "firmness",
+   56
+  ],
+  [
+   "face_02",
+   "as generated",
+   "dark_circle",
+   81
+  ],
+  [
+   "face_02",
+   "as generated",
+   "age_spot",
+   91
+  ],
+  [
+   "face_02",
+   "as generated",
+   "moisture",
+   72
+  ],
+  [
+   "face_02",
+   "as generated",
+   "acne",
+   96
+  ],
+  [
+   "face_02",
+   "as generated",
+   "texture",
+   97
+  ],
+  [
+   "face_02",
+   "as generated",
+   "pore",
+   87
+  ],
+  [
+   "face_02",
+   "as generated",
+   "wrinkle",
+   58
+  ],
+  [
+   "face_02",
+   "warmer light",
+   "eye_bag",
+   71
+  ],
+  [
+   "face_02",
+   "warmer light",
+   "radiance",
+   79
+  ],
+  [
+   "face_02",
+   "warmer light",
+   "age_spot",
+   91
+  ],
+  [
+   "face_02",
+   "warmer light",
+   "oiliness",
+   72
+  ],
+  [
+   "face_02",
+   "warmer light",
+   "firmness",
+   56
+  ],
+  [
+   "face_02",
+   "warmer light",
+   "redness",
+   70
+  ],
+  [
+   "face_02",
+   "warmer light",
+   "dark_circle",
+   80
+  ],
+  [
+   "face_02",
+   "warmer light",
+   "moisture",
+   72
+  ],
+  [
+   "face_02",
+   "warmer light",
+   "acne",
+   96
+  ],
+  [
+   "face_02",
+   "warmer light",
+   "texture",
+   96
+  ],
+  [
+   "face_02",
+   "warmer light",
+   "pore",
+   85
+  ],
+  [
+   "face_02",
+   "warmer light",
+   "wrinkle",
+   59
+  ],
+  [
+   "face_02",
+   "closer framing",
+   "eye_bag",
+   71
+  ],
+  [
+   "face_02",
+   "closer framing",
+   "radiance",
+   80
+  ],
+  [
+   "face_02",
+   "closer framing",
+   "oiliness",
+   71
+  ],
+  [
+   "face_02",
+   "closer framing",
+   "firmness",
+   56
+  ],
+  [
+   "face_02",
+   "closer framing",
+   "redness",
+   71
+  ],
+  [
+   "face_02",
+   "closer framing",
+   "age_spot",
+   91
+  ],
+  [
+   "face_02",
+   "closer framing",
+   "dark_circle",
+   81
+  ],
+  [
+   "face_02",
+   "closer framing",
+   "moisture",
+   73
+  ],
+  [
+   "face_02",
+   "closer framing",
+   "acne",
+   96
+  ],
+  [
+   "face_02",
+   "closer framing",
+   "texture",
+   97
+  ],
+  [
+   "face_02",
+   "closer framing",
+   "pore",
+   88
+  ],
+  [
+   "face_02",
+   "closer framing",
+   "wrinkle",
+   58
+  ],
+  [
+   "face_02",
+   "slightly soft focus",
+   "eye_bag",
+   71
+  ],
+  [
+   "face_02",
+   "slightly soft focus",
+   "redness",
+   70
+  ],
+  [
+   "face_02",
+   "slightly soft focus",
+   "firmness",
+   56
+  ],
+  [
+   "face_02",
+   "slightly soft focus",
+   "radiance",
+   79
+  ],
+  [
+   "face_02",
+   "slightly soft focus",
+   "oiliness",
+   72
+  ],
+  [
+   "face_02",
+   "slightly soft focus",
+   "dark_circle",
+   81
+  ],
+  [
+   "face_02",
+   "slightly soft focus",
+   "age_spot",
+   91
+  ],
+  [
+   "face_02",
+   "slightly soft focus",
+   "moisture",
+   74
+  ],
+  [
+   "face_02",
+   "slightly soft focus",
+   "acne",
+   98
+  ],
+  [
+   "face_02",
+   "slightly soft focus",
+   "texture",
+   99
+  ],
+  [
+   "face_02",
+   "slightly soft focus",
+   "pore",
+   94
+  ],
+  [
+   "face_02",
+   "slightly soft focus",
+   "wrinkle",
+   58
+  ],
+  [
+   "face_03",
+   "as generated",
+   "eye_bag",
+   77
+  ],
+  [
+   "face_03",
+   "as generated",
+   "redness",
+   96
+  ],
+  [
+   "face_03",
+   "as generated",
+   "radiance",
+   95
+  ],
+  [
+   "face_03",
+   "as generated",
+   "oiliness",
+   65
+  ],
+  [
+   "face_03",
+   "as generated",
+   "firmness",
+   89
+  ],
+  [
+   "face_03",
+   "as generated",
+   "age_spot",
+   97
+  ],
+  [
+   "face_03",
+   "as generated",
+   "dark_circle",
+   71
+  ],
+  [
+   "face_03",
+   "as generated",
+   "moisture",
+   73
+  ],
+  [
+   "face_03",
+   "as generated",
+   "acne",
+   99
+  ],
+  [
+   "face_03",
+   "as generated",
+   "texture",
+   67
+  ],
+  [
+   "face_03",
+   "as generated",
+   "pore",
+   76
+  ],
+  [
+   "face_03",
+   "as generated",
+   "wrinkle",
+   75
+  ],
+  [
+   "face_03",
+   "15% brighter",
+   "eye_bag",
+   77
+  ],
+  [
+   "face_03",
+   "15% brighter",
+   "radiance",
+   95
+  ],
+  [
+   "face_03",
+   "15% brighter",
+   "redness",
+   96
+  ],
+  [
+   "face_03",
+   "15% brighter",
+   "firmness",
+   89
+  ],
+  [
+   "face_03",
+   "15% brighter",
+   "oiliness",
+   65
+  ],
+  [
+   "face_03",
+   "15% brighter",
+   "dark_circle",
+   71
+  ],
+  [
+   "face_03",
+   "15% brighter",
+   "age_spot",
+   97
+  ],
+  [
+   "face_03",
+   "15% brighter",
+   "moisture",
+   73
+  ],
+  [
+   "face_03",
+   "15% brighter",
+   "acne",
+   96
+  ],
+  [
+   "face_03",
+   "15% brighter",
+   "texture",
+   67
+  ],
+  [
+   "face_03",
+   "15% brighter",
+   "pore",
+   76
+  ],
+  [
+   "face_03",
+   "15% brighter",
+   "wrinkle",
+   75
+  ],
+  [
+   "face_03",
+   "tilted 3\u00b0",
+   "eye_bag",
+   77
+  ],
+  [
+   "face_03",
+   "tilted 3\u00b0",
+   "redness",
+   94
+  ],
+  [
+   "face_03",
+   "tilted 3\u00b0",
+   "oiliness",
+   65
+  ],
+  [
+   "face_03",
+   "tilted 3\u00b0",
+   "firmness",
+   89
+  ],
+  [
+   "face_03",
+   "tilted 3\u00b0",
+   "radiance",
+   95
+  ],
+  [
+   "face_03",
+   "tilted 3\u00b0",
+   "age_spot",
+   98
+  ],
+  [
+   "face_03",
+   "tilted 3\u00b0",
+   "dark_circle",
+   71
+  ],
+  [
+   "face_03",
+   "tilted 3\u00b0",
+   "moisture",
+   73
+  ],
+  [
+   "face_03",
+   "tilted 3\u00b0",
+   "acne",
+   97
+  ],
+  [
+   "face_03",
+   "tilted 3\u00b0",
+   "texture",
+   68
+  ],
+  [
+   "face_03",
+   "tilted 3\u00b0",
+   "pore",
+   73
+  ],
+  [
+   "face_03",
+   "tilted 3\u00b0",
+   "wrinkle",
+   75
+  ],
+  [
+   "face_03",
+   "slightly soft focus",
+   "eye_bag",
+   77
+  ],
+  [
+   "face_03",
+   "slightly soft focus",
+   "redness",
+   96
+  ],
+  [
+   "face_03",
+   "slightly soft focus",
+   "radiance",
+   95
+  ],
+  [
+   "face_03",
+   "slightly soft focus",
+   "oiliness",
+   66
+  ],
+  [
+   "face_03",
+   "slightly soft focus",
+   "firmness",
+   88
+  ],
+  [
+   "face_03",
+   "slightly soft focus",
+   "dark_circle",
+   70
+  ],
+  [
+   "face_03",
+   "slightly soft focus",
+   "age_spot",
+   97
+  ],
+  [
+   "face_03",
+   "slightly soft focus",
+   "moisture",
+   75
+  ],
+  [
+   "face_03",
+   "slightly soft focus",
+   "acne",
+   99
+  ],
+  [
+   "face_03",
+   "slightly soft focus",
+   "texture",
+   81
+  ],
+  [
+   "face_03",
+   "slightly soft focus",
+   "pore",
+   77
+  ],
+  [
+   "face_03",
+   "slightly soft focus",
+   "wrinkle",
+   78
+  ],
+  [
+   "face_04",
+   "as generated",
+   "eye_bag",
+   67
+  ],
+  [
+   "face_04",
+   "as generated",
+   "radiance",
+   60
+  ],
+  [
+   "face_04",
+   "as generated",
+   "redness",
+   98
+  ],
+  [
+   "face_04",
+   "as generated",
+   "oiliness",
+   58
+  ],
+  [
+   "face_04",
+   "as generated",
+   "dark_circle",
+   68
+  ],
+  [
+   "face_04",
+   "as generated",
+   "firmness",
+   71
+  ],
+  [
+   "face_04",
+   "as generated",
+   "age_spot",
+   70
+  ],
+  [
+   "face_04",
+   "as generated",
+   "moisture",
+   64
+  ],
+  [
+   "face_04",
+   "as generated",
+   "acne",
+   85
+  ],
+  [
+   "face_04",
+   "as generated",
+   "texture",
+   69
+  ],
+  [
+   "face_04",
+   "as generated",
+   "pore",
+   65
+  ],
+  [
+   "face_04",
+   "as generated",
+   "wrinkle",
+   76
+  ],
+  [
+   "face_04",
+   "cooler light",
+   "eye_bag",
+   67
+  ],
+  [
+   "face_04",
+   "cooler light",
+   "redness",
+   97
+  ],
+  [
+   "face_04",
+   "cooler light",
+   "radiance",
+   59
+  ],
+  [
+   "face_04",
+   "cooler light",
+   "age_spot",
+   70
+  ],
+  [
+   "face_04",
+   "cooler light",
+   "dark_circle",
+   68
+  ],
+  [
+   "face_04",
+   "cooler light",
+   "oiliness",
+   58
+  ],
+  [
+   "face_04",
+   "cooler light",
+   "firmness",
+   70
+  ],
+  [
+   "face_04",
+   "cooler light",
+   "moisture",
+   64
+  ],
+  [
+   "face_04",
+   "cooler light",
+   "acne",
+   85
+  ],
+  [
+   "face_04",
+   "cooler light",
+   "texture",
+   72
+  ],
+  [
+   "face_04",
+   "cooler light",
+   "pore",
+   63
+  ],
+  [
+   "face_04",
+   "cooler light",
+   "wrinkle",
+   76
+  ],
+  [
+   "face_04",
+   "closer framing",
+   "redness",
+   99
+  ],
+  [
+   "face_04",
+   "closer framing",
+   "eye_bag",
+   67
+  ],
+  [
+   "face_04",
+   "closer framing",
+   "radiance",
+   60
+  ],
+  [
+   "face_04",
+   "closer framing",
+   "firmness",
+   71
+  ],
+  [
+   "face_04",
+   "closer framing",
+   "oiliness",
+   58
+  ],
+  [
+   "face_04",
+   "closer framing",
+   "dark_circle",
+   68
+  ],
+  [
+   "face_04",
+   "closer framing",
+   "age_spot",
+   71
+  ],
+  [
+   "face_04",
+   "closer framing",
+   "moisture",
+   64
+  ],
+  [
+   "face_04",
+   "closer framing",
+   "acne",
+   85
+  ],
+  [
+   "face_04",
+   "closer framing",
+   "texture",
+   70
+  ],
+  [
+   "face_04",
+   "closer framing",
+   "pore",
+   62
+  ],
+  [
+   "face_04",
+   "closer framing",
+   "wrinkle",
+   75
+  ],
+  [
+   "face_04",
+   "heavier JPEG",
+   "eye_bag",
+   67
+  ],
+  [
+   "face_04",
+   "heavier JPEG",
+   "redness",
+   98
+  ],
+  [
+   "face_04",
+   "heavier JPEG",
+   "radiance",
+   60
+  ],
+  [
+   "face_04",
+   "heavier JPEG",
+   "oiliness",
+   59
+  ],
+  [
+   "face_04",
+   "heavier JPEG",
+   "age_spot",
+   71
+  ],
+  [
+   "face_04",
+   "heavier JPEG",
+   "dark_circle",
+   68
+  ],
+  [
+   "face_04",
+   "heavier JPEG",
+   "firmness",
+   71
+  ],
+  [
+   "face_04",
+   "heavier JPEG",
+   "moisture",
+   64
+  ],
+  [
+   "face_04",
+   "heavier JPEG",
+   "acne",
+   91
+  ],
+  [
+   "face_04",
+   "heavier JPEG",
+   "texture",
+   72
+  ],
+  [
+   "face_04",
+   "heavier JPEG",
+   "pore",
+   65
+  ],
+  [
+   "face_04",
+   "heavier JPEG",
+   "wrinkle",
+   77
+  ],
+  [
+   "face_05",
+   "as generated",
+   "eye_bag",
+   72
+  ],
+  [
+   "face_05",
+   "as generated",
+   "firmness",
+   77
+  ],
+  [
+   "face_05",
+   "as generated",
+   "redness",
+   86
+  ],
+  [
+   "face_05",
+   "as generated",
+   "oiliness",
+   64
+  ],
+  [
+   "face_05",
+   "as generated",
+   "dark_circle",
+   71
+  ],
+  [
+   "face_05",
+   "as generated",
+   "age_spot",
+   80
+  ],
+  [
+   "face_05",
+   "as generated",
+   "radiance",
+   81
+  ],
+  [
+   "face_05",
+   "as generated",
+   "moisture",
+   67
+  ],
+  [
+   "face_05",
+   "as generated",
+   "acne",
+   85
+  ],
+  [
+   "face_05",
+   "as generated",
+   "texture",
+   63
+  ],
+  [
+   "face_05",
+   "as generated",
+   "pore",
+   62
+  ],
+  [
+   "face_05",
+   "as generated",
+   "wrinkle",
+   77
+  ],
+  [
+   "face_05",
+   "15% darker",
+   "eye_bag",
+   72
+  ],
+  [
+   "face_05",
+   "15% darker",
+   "redness",
+   87
+  ],
+  [
+   "face_05",
+   "15% darker",
+   "oiliness",
+   64
+  ],
+  [
+   "face_05",
+   "15% darker",
+   "radiance",
+   80
+  ],
+  [
+   "face_05",
+   "15% darker",
+   "age_spot",
+   80
+  ],
+  [
+   "face_05",
+   "15% darker",
+   "firmness",
+   77
+  ],
+  [
+   "face_05",
+   "15% darker",
+   "dark_circle",
+   71
+  ],
+  [
+   "face_05",
+   "15% darker",
+   "moisture",
+   68
+  ],
+  [
+   "face_05",
+   "15% darker",
+   "acne",
+   85
+  ],
+  [
+   "face_05",
+   "15% darker",
+   "texture",
+   64
+  ],
+  [
+   "face_05",
+   "15% darker",
+   "pore",
+   60
+  ],
+  [
+   "face_05",
+   "15% darker",
+   "wrinkle",
+   78
+  ],
+  [
+   "face_05",
+   "closer framing",
+   "eye_bag",
+   72
+  ],
+  [
+   "face_05",
+   "closer framing",
+   "radiance",
+   80
+  ],
+  [
+   "face_05",
+   "closer framing",
+   "oiliness",
+   63
+  ],
+  [
+   "face_05",
+   "closer framing",
+   "firmness",
+   76
+  ],
+  [
+   "face_05",
+   "closer framing",
+   "redness",
+   85
+  ],
+  [
+   "face_05",
+   "closer framing",
+   "age_spot",
+   80
+  ],
+  [
+   "face_05",
+   "closer framing",
+   "dark_circle",
+   71
+  ],
+  [
+   "face_05",
+   "closer framing",
+   "moisture",
+   67
+  ],
+  [
+   "face_05",
+   "closer framing",
+   "acne",
+   85
+  ],
+  [
+   "face_05",
+   "closer framing",
+   "texture",
+   65
+  ],
+  [
+   "face_05",
+   "closer framing",
+   "pore",
+   61
+  ],
+  [
+   "face_05",
+   "closer framing",
+   "wrinkle",
+   77
+  ],
+  [
+   "face_05",
+   "heavier JPEG",
+   "redness",
+   85
+  ],
+  [
+   "face_05",
+   "heavier JPEG",
+   "eye_bag",
+   72
+  ],
+  [
+   "face_05",
+   "heavier JPEG",
+   "age_spot",
+   80
+  ],
+  [
+   "face_05",
+   "heavier JPEG",
+   "radiance",
+   80
+  ],
+  [
+   "face_05",
+   "heavier JPEG",
+   "oiliness",
+   64
+  ],
+  [
+   "face_05",
+   "heavier JPEG",
+   "moisture",
+   67
+  ],
+  [
+   "face_05",
+   "heavier JPEG",
+   "firmness",
+   77
+  ],
+  [
+   "face_05",
+   "heavier JPEG",
+   "dark_circle",
+   71
+  ],
+  [
+   "face_05",
+   "heavier JPEG",
+   "acne",
+   87
+  ],
+  [
+   "face_05",
+   "heavier JPEG",
+   "texture",
+   63
+  ],
+  [
+   "face_05",
+   "heavier JPEG",
+   "pore",
+   62
+  ],
+  [
+   "face_05",
+   "heavier JPEG",
+   "wrinkle",
+   78
+  ],
+  [
+   "face_06",
+   "as generated",
+   "eye_bag",
+   54
+  ],
+  [
+   "face_06",
+   "as generated",
+   "redness",
+   74
+  ],
+  [
+   "face_06",
+   "as generated",
+   "age_spot",
+   61
+  ],
+  [
+   "face_06",
+   "as generated",
+   "oiliness",
+   63
+  ],
+  [
+   "face_06",
+   "as generated",
+   "radiance",
+   65
+  ],
+  [
+   "face_06",
+   "as generated",
+   "firmness",
+   59
+  ],
+  [
+   "face_06",
+   "as generated",
+   "moisture",
+   62
+  ],
+  [
+   "face_06",
+   "as generated",
+   "dark_circle",
+   77
+  ],
+  [
+   "face_06",
+   "as generated",
+   "acne",
+   98
+  ],
+  [
+   "face_06",
+   "as generated",
+   "texture",
+   71
+  ],
+  [
+   "face_06",
+   "as generated",
+   "pore",
+   74
+  ],
+  [
+   "face_06",
+   "as generated",
+   "wrinkle",
+   58
+  ],
+  [
+   "face_06",
+   "warmer light",
+   "eye_bag",
+   53
+  ],
+  [
+   "face_06",
+   "warmer light",
+   "redness",
+   74
+  ],
+  [
+   "face_06",
+   "warmer light",
+   "oiliness",
+   64
+  ],
+  [
+   "face_06",
+   "warmer light",
+   "radiance",
+   66
+  ],
+  [
+   "face_06",
+   "warmer light",
+   "dark_circle",
+   77
+  ],
+  [
+   "face_06",
+   "warmer light",
+   "age_spot",
+   62
+  ],
+  [
+   "face_06",
+   "warmer light",
+   "firmness",
+   59
+  ],
+  [
+   "face_06",
+   "warmer light",
+   "moisture",
+   62
+  ],
+  [
+   "face_06",
+   "warmer light",
+   "acne",
+   95
+  ],
+  [
+   "face_06",
+   "warmer light",
+   "texture",
+   73
+  ],
+  [
+   "face_06",
+   "warmer light",
+   "pore",
+   74
+  ],
+  [
+   "face_06",
+   "warmer light",
+   "wrinkle",
+   58
+  ],
+  [
+   "face_06",
+   "tilted 3\u00b0",
+   "eye_bag",
+   53
+  ],
+  [
+   "face_06",
+   "tilted 3\u00b0",
+   "redness",
+   74
+  ],
+  [
+   "face_06",
+   "tilted 3\u00b0",
+   "radiance",
+   65
+  ],
+  [
+   "face_06",
+   "tilted 3\u00b0",
+   "oiliness",
+   65
+  ],
+  [
+   "face_06",
+   "tilted 3\u00b0",
+   "firmness",
+   60
+  ],
+  [
+   "face_06",
+   "tilted 3\u00b0",
+   "dark_circle",
+   77
+  ],
+  [
+   "face_06",
+   "tilted 3\u00b0",
+   "age_spot",
+   61
+  ],
+  [
+   "face_06",
+   "tilted 3\u00b0",
+   "moisture",
+   61
+  ],
+  [
+   "face_06",
+   "tilted 3\u00b0",
+   "acne",
+   96
+  ],
+  [
+   "face_06",
+   "tilted 3\u00b0",
+   "texture",
+   72
+  ],
+  [
+   "face_06",
+   "tilted 3\u00b0",
+   "pore",
+   68
+  ],
+  [
+   "face_06",
+   "tilted 3\u00b0",
+   "wrinkle",
+   58
+  ],
+  [
+   "face_06",
+   "slightly soft focus",
+   "eye_bag",
+   53
+  ],
+  [
+   "face_06",
+   "slightly soft focus",
+   "firmness",
+   59
+  ],
+  [
+   "face_06",
+   "slightly soft focus",
+   "radiance",
+   66
+  ],
+  [
+   "face_06",
+   "slightly soft focus",
+   "redness",
+   74
+  ],
+  [
+   "face_06",
+   "slightly soft focus",
+   "age_spot",
+   58
+  ],
+  [
+   "face_06",
+   "slightly soft focus",
+   "dark_circle",
+   77
+  ],
+  [
+   "face_06",
+   "slightly soft focus",
+   "oiliness",
+   64
+  ],
+  [
+   "face_06",
+   "slightly soft focus",
+   "moisture",
+   64
+  ],
+  [
+   "face_06",
+   "slightly soft focus",
+   "acne",
+   99
+  ],
+  [
+   "face_06",
+   "slightly soft focus",
+   "texture",
+   81
+  ],
+  [
+   "face_06",
+   "slightly soft focus",
+   "pore",
+   74
+  ],
+  [
+   "face_06",
+   "slightly soft focus",
+   "wrinkle",
+   58
+  ]
+ ],
+ "rejected": [
+  [
+   "face_02",
+   "slightly soft focus"
+  ],
+  [
+   "face_03",
+   "slightly soft focus"
+  ],
+  [
+   "face_06",
+   "slightly soft focus"
+  ]
+ ]
+}

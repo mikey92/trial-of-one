@@ -1,1 +1,277 @@
-{"faces":0,"scans":0,"noise":{},"rows":[],"edits":[]}
+{
+ "faces": 6,
+ "scans": 24,
+ "edits": [
+  "15% darker",
+  "15% brighter",
+  "warmer light",
+  "cooler light",
+  "tilted 3\u00b0",
+  "closer framing",
+  "heavier JPEG",
+  "slightly soft focus"
+ ],
+ "facesPerEdit": {
+  "15% darker": 2,
+  "15% brighter": 1,
+  "warmer light": 2,
+  "cooler light": 1,
+  "tilted 3\u00b0": 3,
+  "closer framing": 3,
+  "heavier JPEG": 3,
+  "slightly soft focus": 3
+ },
+ "rejected": [
+  "slightly soft focus"
+ ],
+ "noise": {
+  "wrinkle": {
+   "capture": 0.54,
+   "day": 3.0
+  },
+  "texture": {
+   "capture": 0.92,
+   "day": 3.0
+  },
+  "pore": {
+   "capture": 1.77,
+   "day": 3.0
+  },
+  "acne": {
+   "capture": 1.68,
+   "day": 3.0
+  },
+  "redness": {
+   "capture": 0.77,
+   "day": 3.0
+  },
+  "oiliness": {
+   "capture": 1.22,
+   "day": 3.0
+  },
+  "moisture": {
+   "capture": 0.5,
+   "day": 3.0
+  },
+  "radiance": {
+   "capture": 0.5,
+   "day": 3.0
+  },
+  "age_spot": {
+   "capture": 0.5,
+   "day": 3.0
+  },
+  "dark_circle": {
+   "capture": 0.5,
+   "day": 3.0
+  },
+  "eye_bag": {
+   "capture": 0.5,
+   "day": 3.0
+  },
+  "firmness": {
+   "capture": 0.5,
+   "day": 3.0
+  }
+ },
+ "rows": [
+  {
+   "concern": "texture",
+   "capture": 0.92,
+   "unchecked": 3.48,
+   "day": 3.0,
+   "byEdit": {
+    "15% darker": 0.5,
+    "15% brighter": 0,
+    "warmer light": 0.5,
+    "cooler light": 3,
+    "tilted 3\u00b0": 0.67,
+    "closer framing": 1,
+    "heavier JPEG": 1,
+    "slightly soft focus": 8.67
+   }
+  },
+  {
+   "concern": "pore",
+   "capture": 1.77,
+   "unchecked": 2.28,
+   "day": 3.0,
+   "byEdit": {
+    "15% darker": 0,
+    "15% brighter": 0,
+    "warmer light": -1,
+    "cooler light": -2,
+    "tilted 3\u00b0": -2.67,
+    "closer framing": -1,
+    "heavier JPEG": 0,
+    "slightly soft focus": 2.67
+   }
+  },
+  {
+   "concern": "acne",
+   "capture": 1.68,
+   "unchecked": 1.71,
+   "day": 3.0,
+   "byEdit": {
+    "15% darker": 0,
+    "15% brighter": -3,
+    "warmer light": -1.5,
+    "cooler light": 0,
+    "tilted 3\u00b0": -1.33,
+    "closer framing": 0,
+    "heavier JPEG": 3.33,
+    "slightly soft focus": 1
+   }
+  },
+  {
+   "concern": "oiliness",
+   "capture": 1.22,
+   "unchecked": 1.14,
+   "day": 3.0,
+   "byEdit": {
+    "15% darker": 0,
+    "15% brighter": 0,
+    "warmer light": 1,
+    "cooler light": 0,
+    "tilted 3\u00b0": -0.33,
+    "closer framing": -0.33,
+    "heavier JPEG": 1.33,
+    "slightly soft focus": 1
+   }
+  },
+  {
+   "concern": "moisture",
+   "capture": 0.43,
+   "unchecked": 0.82,
+   "day": 3.0,
+   "byEdit": {
+    "15% darker": 0.5,
+    "15% brighter": 0,
+    "warmer light": 0,
+    "cooler light": 0,
+    "tilted 3\u00b0": 0,
+    "closer framing": 0.33,
+    "heavier JPEG": 0,
+    "slightly soft focus": 2
+   }
+  },
+  {
+   "concern": "wrinkle",
+   "capture": 0.54,
+   "unchecked": 0.79,
+   "day": 3.0,
+   "byEdit": {
+    "15% darker": 0.5,
+    "15% brighter": 0,
+    "warmer light": 0.5,
+    "cooler light": 0,
+    "tilted 3\u00b0": 0,
+    "closer framing": -0.33,
+    "heavier JPEG": 1,
+    "slightly soft focus": 1
+   }
+  },
+  {
+   "concern": "age_spot",
+   "capture": 0.39,
+   "unchecked": 0.77,
+   "day": 3.0,
+   "byEdit": {
+    "15% darker": 0,
+    "15% brighter": 0,
+    "warmer light": 0.5,
+    "cooler light": 0,
+    "tilted 3\u00b0": 0.33,
+    "closer framing": 0.33,
+    "heavier JPEG": 0.33,
+    "slightly soft focus": -1
+   }
+  },
+  {
+   "concern": "redness",
+   "capture": 0.77,
+   "unchecked": 0.72,
+   "day": 3.0,
+   "byEdit": {
+    "15% darker": 1,
+    "15% brighter": 0,
+    "warmer light": 0,
+    "cooler light": -1,
+    "tilted 3\u00b0": -0.67,
+    "closer framing": 0.33,
+    "heavier JPEG": -0.33,
+    "slightly soft focus": 0
+   }
+  },
+  {
+   "concern": "radiance",
+   "capture": 0.43,
+   "unchecked": 0.42,
+   "day": 3.0,
+   "byEdit": {
+    "15% darker": -0.5,
+    "15% brighter": 0,
+    "warmer light": 0.5,
+    "cooler light": -1,
+    "tilted 3\u00b0": 0,
+    "closer framing": 0,
+    "heavier JPEG": -0.33,
+    "slightly soft focus": 0.33
+   }
+  },
+  {
+   "concern": "firmness",
+   "capture": 0.38,
+   "unchecked": 0.41,
+   "day": 3.0,
+   "byEdit": {
+    "15% darker": 0,
+    "15% brighter": 0,
+    "warmer light": 0,
+    "cooler light": -1,
+    "tilted 3\u00b0": 0.33,
+    "closer framing": -0.33,
+    "heavier JPEG": 0,
+    "slightly soft focus": -0.33
+   }
+  },
+  {
+   "concern": "dark_circle",
+   "capture": 0.31,
+   "unchecked": 0.35,
+   "day": 3.0,
+   "byEdit": {
+    "15% darker": -0.5,
+    "15% brighter": 0,
+    "warmer light": -0.5,
+    "cooler light": 0,
+    "tilted 3\u00b0": 0,
+    "closer framing": 0,
+    "heavier JPEG": 0,
+    "slightly soft focus": -0.33
+   }
+  },
+  {
+   "concern": "eye_bag",
+   "capture": 0.33,
+   "unchecked": 0.31,
+   "day": 3.0,
+   "byEdit": {
+    "15% darker": 0,
+    "15% brighter": 0,
+    "warmer light": -0.5,
+    "cooler light": 0,
+    "tilted 3\u00b0": 0,
+    "closer framing": 0,
+    "heavier JPEG": 0.33,
+    "slightly soft focus": -0.33
+   }
+  }
+ ],
+ "naive": {
+  "concern": "texture",
+  "before": 67,
+  "after": 81,
+  "edit": "slightly soft focus"
+ }
+}
