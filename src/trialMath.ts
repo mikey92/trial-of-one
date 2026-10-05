@@ -1,0 +1,96 @@
+// Glue between a stored trial and the statistics: per-concern verdicts for the dashboard
+// and the facts the weekly note is written from.
+
+import { ACTIVE_BY_ID, type Active } from "../shared/actives";
+import { CONCERN_BY_ID, type ConcernId } from "../shared/concerns";
+import { nextCheckIn } from "../shared/plan";
+import { judgeConcern, overall, WEEK_MS, type ConcernResult, type NoisePrior, type TrialVerdict } from "../shared/stats";
+import type { Trial } from "./types";
+import STUDY from "./study.json";
+
+/** Noise measured in our perturbation study, per concern (falls back to the default prior). */
+export function priorFor(concern: ConcernId): NoisePrior | undefined {
+  const row = (STUDY as { noise?: Record<string, NoisePrior> }).noise?.[concern];
+  return row && row.capture > 0 ? row : undefined;
+}
+
+/** The timing rules for a trial: the slowest relevant active decides when a verdict is fair. */
+export function timing(trial: Trial): Pick<Active, "onsetWeeks" | "fairWeeks" | "earlyEffects"> {
+  return { onsetWeeks: trial.plan.onsetWeeks, fairWeeks: trial.plan.fairWeeks, earlyEffects: trial.plan.earlyEffects };
+}
+
+/** Scans that count: photos that failed the light or focus check are shown but not judged. */
+export function usable(trial: Trial) {
+  return trial.scans.filter((s) => !s.flagged);
+}
+
+export interface Assessment { results: ConcernResult[]; verdict: TrialVerdict; week: number; next: Date | null; complete: boolean }
+
+/** The example trial is judged as of the day after its last check-in, not today. */
+export function judgedAt(trial: Trial): Date {
+  if (!trial.demo || !trial.scans.length) return new Date();
+  return new Date(Math.max(...trial.scans.map((s) => Date.parse(s.takenAt))) + 24 * 3600 * 1000);
+}
+
+export function assess(trial: Trial, now = judgedAt(trial)): Assessment {
+  const started = trial.plan.startedAt;
+  const scans = usable(trial);
+  const results = trial.plan.targets.map((c) =>
+    started ? judgeConcern(scans, c, timing(trial), started, now, priorFor(c)) : { concern: c, change: null, verdict: { kind: "waiting" as const } },
+  );
+  const week = started ? Math.max(0, Math.floor((now.getTime() - Date.parse(started)) / WEEK_MS)) : 0;
+  const trialScans = trial.scans.filter((s) => s.phase === "trial");
+  const last = trialScans.length ? new Date(trialScans[trialScans.length - 1].takenAt) : null;
+  const lastWeek = started && last ? (last.getTime() - Date.parse(started)) / WEEK_MS : 0;
+  const complete = Boolean(started) && lastWeek >= trial.plan.fairWeeks - 0.5;
+  return {
+    results, verdict: overall(results), week, complete,
+    next: started && !complete ? nextCheckIn(trial.plan, last, now) : null,
+  };
+}
+
+export function label(c: ConcernId): string {
+  return CONCERN_BY_ID[c].label;
+}
+
+export function noteRequest(trial: Trial, a: Assessment, retake?: string) {
+  const recentChanges = trial.changes.filter((c) => a.next && Date.parse(c.at) > a.next.getTime() - 14 * 24 * 3600 * 1000).map((c) => c.what);
+  return {
+    kind: "checkin" as const,
+    product: trial.plan.product,
+    week: a.week,
+    overall: a.verdict,
+    lines: a.results.map((r) => ({
+      label: label(r.concern),
+      verdict: r.verdict.kind,
+      delta: r.change ? round1(r.change.delta) : null,
+      mdc: r.change ? round1(r.change.mdc) : null,
+      fairOn: r.verdict.kind === "too_early" ? r.verdict.fairOn : undefined,
+      note: "note" in r.verdict ? r.verdict.note : undefined,
+    })),
+    retake,
+    changes: recentChanges.length ? recentChanges : undefined,
+    nextCheckIn: a.next ? a.next.toISOString().slice(0, 10) : "after your baseline",
+  };
+}
+
+export function planRequest(trial: Trial) {
+  const p = trial.plan;
+  return {
+    kind: "plan" as const,
+    product: p.product,
+    actives: p.actives.map((a) => a.name),
+    targets: p.targets.map(label),
+    onsetWeeks: p.onsetWeeks,
+    fairWeeks: p.fairWeeks,
+    earlyEffects: [...new Set(p.earlyEffects.map((e) => e.note))],
+  };
+}
+
+export function activeName(id: string): string {
+  return ACTIVE_BY_ID[id]?.name ?? id;
+}
+
+function round1(v: number): number {
+  return Math.round(v * 10) / 10;
+}
