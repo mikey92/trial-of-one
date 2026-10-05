@@ -4,7 +4,7 @@ import { startPlan } from "../../shared/plan";
 import { note } from "../api";
 import { ConcernChart } from "../Chart";
 import { deleteTrial } from "../store";
-import { assess, noteRequest, priorFor, usable } from "../trialMath";
+import { assess, noteRequest, priorFor, SIDE_EFFECT_BAR, sideEffects, usable } from "../trialMath";
 import type { StoredScan, Trial } from "../types";
 import { concernVerdictText, VerdictBadge } from "../Verdict";
 import { Capture } from "./Capture";
@@ -18,6 +18,7 @@ export function TrialView({ trial, onChange, readOnly }: Props) {
   const [writing, setWriting] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const a = useMemo(() => assess(trial), [trial]);
+  const side = useMemo(() => sideEffects(trial), [trial]);
   const p = trial.plan;
   const baselineSessions = new Set(trial.scans.filter((s) => s.phase === "baseline" && !s.flagged).map((s) => s.sessionId)).size;
   const phase: StoredScan["phase"] = p.startedAt ? "trial" : "baseline";
@@ -153,6 +154,23 @@ export function TrialView({ trial, onChange, readOnly }: Props) {
       {others.length > 0 && scans.length > 0 && (
         <section aria-labelledby="others-h">
           <h2 id="others-h">Everything else (side effects)</h2>
+          {side.length === 0 ? (
+            <p className="muted small">
+              {p.startedAt
+                ? "Nothing else has got worse by more than the photos can explain."
+                : "After the baseline, every other score is watched for side effects."}
+            </p>
+          ) : (
+            <ul className="side-effects" role="status">
+              {side.map(({ change: c, expected }) => (
+                <li key={c.concern}>
+                  <strong>{CONCERN_BY_ID[c.concern].label}</strong>: {c.delta.toFixed(1)} points since the baseline, more
+                  than the {(SIDE_EFFECT_BAR * c.mdc).toFixed(1)} the photos can explain.{" "}
+                  {expected ?? "If it keeps going, stop the product and check with a pharmacist or dermatologist."}
+                </li>
+              ))}
+            </ul>
+          )}
           <button className="button ghost" aria-expanded={showAll} onClick={() => setShowAll(!showAll)}>
             {showAll ? "Hide" : `Show ${others.length} more scores`}
           </button>

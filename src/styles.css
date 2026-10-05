@@ -129,3 +129,5 @@ th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--lin
 .product legend { padding: 0 6px; }
 .timeline { padding-left: 1.2em; }
 .timeline li { margin-bottom: 0.5em; }
+.side-effects { margin: 8px 0 12px; padding: 12px 16px 12px 32px; background: var(--warn-bg); border-radius: 8px; }
+.side-effects li + li { margin-top: 6px; }

@@ -4,7 +4,7 @@
 import { ACTIVE_BY_ID, type Active } from "../shared/actives";
 import { CONCERN_BY_ID, type ConcernId } from "../shared/concerns";
 import { nextCheckIn } from "../shared/plan";
-import { judgeConcern, overall, WEEK_MS, type ConcernResult, type NoisePrior, type TrialVerdict } from "../shared/stats";
+import { changeFor, judgeConcern, overall, WEEK_MS, type Change, type ConcernResult, type NoisePrior, type TrialVerdict } from "../shared/stats";
 import type { Trial } from "./types";
 import STUDY from "./study.json";
 
@@ -47,6 +47,31 @@ export function assess(trial: Trial, now = judgedAt(trial)): Assessment {
     results, verdict: overall(results), week, complete,
     next: started && !complete ? nextCheckIn(trial.plan, last, now) : null,
   };
+}
+
+/**
+ * Side effects need a stricter bar than targets: eleven other concerns checked every week
+ * would cross the plain 95% line by chance about one week in four. 1.5 times the minimal
+ * detectable change is roughly that line corrected for eleven comparisons.
+ */
+export const SIDE_EFFECT_BAR = 1.5;
+
+export interface SideEffect { change: Change; expected?: string }
+
+/** Concerns the product does not target that got worse by more than the photos can explain. */
+export function sideEffects(trial: Trial, now = judgedAt(trial)): SideEffect[] {
+  const p = trial.plan;
+  if (!p.startedAt) return [];
+  const weeks = (now.getTime() - Date.parse(p.startedAt)) / WEEK_MS;
+  const scans = usable(trial);
+  return p.tracked
+    .filter((c) => !p.targets.includes(c))
+    .flatMap((c) => {
+      const change = changeFor(scans, c, priorFor(c));
+      if (!change || change.delta > -SIDE_EFFECT_BAR * change.mdc) return [];
+      const early = p.earlyEffects.find((e) => e.concern === c && weeks < e.untilWeek);
+      return [{ change, expected: early?.note }];
+    });
 }
 
 export function label(c: ConcernId): string {
