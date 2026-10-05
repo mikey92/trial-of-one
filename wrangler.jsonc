@@ -8,7 +8,7 @@
     "run_worker_first": ["/api/*"]
   },
   // Analysis results by photo hash (same photo, same answer, no second unit) and the daily budget.
-  "kv_namespaces": [{ "binding": "CACHE", "id": "REPLACE_WITH_KV_ID" }],
+  "kv_namespaces": [{ "binding": "CACHE", "id": "ffd9a970bafd49e4921f03de1e09ddec" }],
   "ratelimits": [
     // Photos per visitor per minute: a sitting is one photo, plus a retake or two.
     { "name": "ANALYZE_LIMIT", "namespace_id": "5101", "simple": { "limit": 6, "period": 60 } },
