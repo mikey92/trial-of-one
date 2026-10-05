@@ -4,7 +4,7 @@ import { startPlan } from "../../shared/plan";
 import { note } from "../api";
 import { ConcernChart } from "../Chart";
 import { deleteTrial } from "../store";
-import { assess, noteRequest, priorFor, SIDE_EFFECT_BAR, sideEffects, usable } from "../trialMath";
+import { assess, history, noteRequest, priorFor, SIDE_EFFECT_BAR, sideEffects, usable } from "../trialMath";
 import type { StoredScan, Trial } from "../types";
 import { concernVerdictText, VerdictBadge } from "../Verdict";
 import { Capture } from "./Capture";
@@ -19,6 +19,7 @@ export function TrialView({ trial, onChange, readOnly }: Props) {
   const [showAll, setShowAll] = useState(false);
   const a = useMemo(() => assess(trial), [trial]);
   const side = useMemo(() => sideEffects(trial), [trial]);
+  const weeks = useMemo(() => history(trial), [trial]);
   const p = trial.plan;
   const baselineSessions = new Set(trial.scans.filter((s) => s.phase === "baseline" && !s.flagged).map((s) => s.sessionId)).size;
   const phase: StoredScan["phase"] = p.startedAt ? "trial" : "baseline";
@@ -150,6 +151,41 @@ export function TrialView({ trial, onChange, readOnly }: Props) {
           );
         })}
       </section>
+
+      {weeks.length >= 2 && (
+        <section aria-labelledby="weeks-h">
+          <h2 id="weeks-h">Week by week</h2>
+          <div className="table-wrap">
+            <table>
+              <caption className="sr-only">What the trial said after each check-in</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Week</th>
+                  {p.targets.map((c) => <th key={c} scope="col">{CONCERN_BY_ID[c].label}: change (needed)</th>)}
+                  <th scope="col">Verdict</th>
+                </tr>
+              </thead>
+              <tbody>
+                {weeks.map((w) => (
+                  <tr key={w.at}>
+                    <th scope="row">{w.week}</th>
+                    {w.results.map((r) => (
+                      <td key={r.concern}>
+                        {r.change ? `${r.change.delta > 0 ? "+" : ""}${r.change.delta.toFixed(1)} (${r.change.mdc.toFixed(1)})` : "—"}
+                      </td>
+                    ))}
+                    <td><VerdictBadge verdict={w.verdict} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="muted small">
+            Each row is what the trial said that day, from the photos taken by then. A change counts once it is bigger
+            than the number in brackets, the smallest change those photos can show.
+          </p>
+        </section>
+      )}
 
       {others.length > 0 && scans.length > 0 && (
         <section aria-labelledby="others-h">

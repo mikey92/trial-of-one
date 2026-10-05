@@ -49,6 +49,23 @@ export function assess(trial: Trial, now = judgedAt(trial)): Assessment {
   };
 }
 
+export interface HistoryRow { week: number; at: string; verdict: TrialVerdict; results: ConcernResult[] }
+
+/** What the trial would have said after each check-in, replayed from the scans taken by then. */
+export function history(trial: Trial): HistoryRow[] {
+  if (!trial.plan.startedAt) return [];
+  const sessions = new Map<string, number>();
+  for (const s of usable(trial)) {
+    if (s.phase !== "trial") continue;
+    sessions.set(s.sessionId, Math.max(sessions.get(s.sessionId) ?? 0, Date.parse(s.takenAt)));
+  }
+  return [...sessions.values()].sort((a, b) => a - b).map((at) => {
+    const sofar = { ...trial, scans: trial.scans.filter((s) => Date.parse(s.takenAt) <= at) };
+    const a = assess(sofar, new Date(at + 3600 * 1000));
+    return { week: a.week, at: new Date(at).toISOString(), verdict: a.verdict, results: a.results };
+  });
+}
+
 /**
  * Side effects need a stricter bar than targets: eleven other concerns checked every week
  * would cross the plain 95% line by chance about one week in four. 1.5 times the minimal
@@ -95,7 +112,7 @@ export function noteRequest(trial: Trial, a: Assessment, retake?: string) {
     })),
     retake,
     changes: recentChanges.length ? recentChanges : undefined,
-    nextCheckIn: a.next ? a.next.toISOString().slice(0, 10) : "after your baseline",
+    nextCheckIn: a.next ? a.next.toISOString().slice(0, 10) : a.complete ? "none, the trial is complete" : "after your baseline",
   };
 }
 
