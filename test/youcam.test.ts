@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { parseScores } from "../worker/youcam";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { analysisCost, parseScores, unitsLeft } from "../worker/youcam";
 
 // The shape of a real HD skin-analysis result (scores from a synthetic test face, URLs removed).
 const results = {
@@ -24,5 +24,27 @@ describe("parseScores", () => {
     expect(s.pore).toMatchObject({ ui: 97, raw: 98.9 });
     expect(s.wrinkle).toMatchObject({ ui: 80, raw: 90.0 });
     expect(s.redness).toMatchObject({ ui: 66, raw: 46.2, mask: "m" });
+  });
+});
+
+describe("units", () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("prices an analysis by tier and concern count, as YouCam's feature-cost table does", () => {
+    expect(analysisCost("hd", 12)).toBe(20);
+    expect(analysisCost("hd", 4)).toBe(12);
+    expect(analysisCost("hd", 5)).toBe(16);
+    expect(analysisCost("hd", 16)).toBe(22);
+    expect(analysisCost("sd", 1)).toBe(9);
+    expect(analysisCost("sd", 9)).toBe(14);
+  });
+
+  it("adds up the credit that has not expired", async () => {
+    const body = { status: 200, results: [
+      { type: "ApiPaygToken", amount: 960, amount_dec: 960.0, expiry: 2_000 },
+      { type: "ApiPaygToken", amount: 50, amount_dec: 50.0, expiry: 500 },
+    ] };
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify(body), { status: 200 })));
+    expect(await unitsLeft("k", 1_000)).toBe(960);
   });
 });

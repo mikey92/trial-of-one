@@ -76,6 +76,22 @@ export async function pollAnalysis(key: string, taskId: string, deadlineMs: numb
   throw new YouCamError("The analysis is taking longer than expected; try again in a minute", 504);
 }
 
+/** Units one analysis costs: YouCam prices it by tier and by how many concerns it scores. */
+export function analysisCost(tier: Tier, concerns: number): number {
+  const steps = tier === "hd" ? [12, 16, 20, 22] : [9, 12, 14, 16];
+  return steps[Math.min(Math.max(Math.ceil(concerns / 4), 1), steps.length) - 1];
+}
+
+/** Units left on the account, counting only credit that has not expired. */
+export async function unitsLeft(key: string, now = Date.now()): Promise<number> {
+  const res = await fetch("https://yce-api-01.makeupar.com/s2s/v1.0/client/credit", { headers: { Authorization: `Bearer ${key}` } });
+  const body: any = await res.json().catch(() => ({}));
+  if (!res.ok || !Array.isArray(body.results)) throw new YouCamError(`YouCam returned ${res.status} for the unit balance`, 502);
+  return body.results
+    .filter((c: any) => !c.expiry || c.expiry > now)
+    .reduce((sum: number, c: any) => sum + Number(c.amount_dec ?? c.amount ?? 0), 0);
+}
+
 export function parseScores(results: any): Analysis["scores"] {
   const out: Analysis["scores"] = {};
   const list: any[] = Array.isArray(results?.output) ? results.output : Array.isArray(results) ? results : [];

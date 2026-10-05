@@ -1,6 +1,6 @@
 import { CONCERNS, type ConcernId, type Tier } from "../shared/concerns";
 import { writeNote, type NoteRequest } from "./agent";
-import { pollAnalysis, startAnalysis, uploadImage, YouCamError, type Analysis } from "./youcam";
+import { analysisCost, pollAnalysis, startAnalysis, unitsLeft, uploadImage, YouCamError, type Analysis } from "./youcam";
 
 export interface Env {
   ASSETS: Fetcher;
@@ -12,6 +12,8 @@ export interface Env {
   LLM_RELAY_KEY?: string;
   /** Analyses allowed per UTC day across all visitors; protects the hackathon's API units. */
   DAILY_ANALYSES?: string;
+  /** Units kept on the account: new scans stop before the balance would drop below this. */
+  UNIT_FLOOR?: string;
 }
 
 const MAX_BYTES = 8 * 1024 * 1024;
@@ -56,11 +58,14 @@ async function analyze(req: Request, env: Env, url: URL): Promise<Response> {
   const today = new Date().toISOString().slice(0, 10);
   const budgetKey = `budget:${today}`;
   const used = Number((await env.CACHE.get(budgetKey)) ?? 0);
-  if (used >= Number(env.DAILY_ANALYSES ?? 150)) {
+  if (used >= Number(env.DAILY_ANALYSES ?? 10)) {
     return json({ error: "Today's free analyses are used up. The demo trial still works, and new scans open again tomorrow (UTC)." }, 503);
   }
 
   const key = env.YOUCAM_API_KEY;
+  if ((await unitsLeft(key)) - analysisCost(tier, concerns.length) < Number(env.UNIT_FLOOR ?? 0)) {
+    return json({ error: "This demo's analysis units are used up. The example trial still shows every step." }, 503);
+  }
   const fileId = await uploadImage(key, bytes, type);
   const taskId = await startAnalysis(key, fileId, concerns, tier);
   const result = await pollAnalysis(key, taskId, Date.now() + 60_000);
