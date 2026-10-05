@@ -8,7 +8,7 @@
 
 The YouCam brief describes the moment exactly: someone standing in front of a mirror, deciding whether a product is working. We kept running into the same problem from the other side: the mirror is a terrible instrument. Light from a different window, a bad night's sleep, a phone held a bit lower, last week's breakout: each moves what you see more than most actives move skin in a month. So people quit products that needed eight more weeks, keep paying for ones that do nothing, or start three new things at once and never learn which one helped.
 
-An AI skin score fixes the eye, not the photo. Before building anything we measured how much YouCam's scores move when only the photo changes (the noise study below). That number became the core of the app.
+An AI skin score fixes the eye, not the photo. So we measured how much YouCam's scores move when only the photo changes (the noise study below), and that number became the core of the app: it decides how big a change has to be before Trial of One calls it real, and what to do next while it isn't.
 
 ## What it does
 
