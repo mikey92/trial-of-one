@@ -123,7 +123,7 @@ export function Study() {
           <p>
             Focus mattered most. A blur too slight to notice on a phone screen flattered texture, and a check on a small
             copy of the photo could not see it, so the app measures sharpness at full detail. Light, framing and JPEG
-            edits that pass the check moved most scores by a point or less; pores and acne moved most, so a trial needs
+            edits that pass the check moved most scores by a point or less; pores and breakouts moved most, so a trial needs
             the largest change on those before it calls one.
           </p>
           <p>
