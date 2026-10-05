@@ -37,10 +37,31 @@ def _call(path: str, body: dict | None = None) -> dict:
     return data.get("data", data)
 
 
+def _cache_file(jpeg: bytes, tier: str, concerns: list[str]) -> Path:
+    digest = hashlib.sha256(jpeg + tier.encode() + ",".join(concerns).encode()).hexdigest()
+    return CACHE / f"{digest}.json"
+
+
+def cached(jpeg: bytes, tier: str = "hd", concerns: list[str] = CONCERNS) -> bool:
+    return _cache_file(jpeg, tier, concerns).exists()
+
+
+def scores_from(output: list[dict]) -> dict:
+    """{concern: {"ui", "raw"}} from a finished task's output list."""
+    out = {}
+    for item in output:
+        # Skip the overall score, skin age and resized image, and the per-region pore and
+        # wrinkle scores: the trial tracks each concern over the whole face.
+        if "ui_score" not in item or item.get("region", "whole") != "whole":
+            continue
+        name = item["type"].removeprefix("hd_")
+        out[name] = {"ui": item["ui_score"], "raw": item.get("raw_score", item["ui_score"])}
+    return out
+
+
 def analyze(jpeg: bytes, tier: str = "hd", concerns: list[str] = CONCERNS) -> dict:
     """Scores for one JPEG: {concern: {"ui": float, "raw": float}}."""
-    digest = hashlib.sha256(jpeg + tier.encode() + ",".join(concerns).encode()).hexdigest()
-    hit = CACHE / f"{digest}.json"
+    hit = _cache_file(jpeg, tier, concerns)
     if hit.exists():
         return json.loads(hit.read_text())
     files = _call("/file", {"files": [{"content_type": "image/jpeg", "file_name": "scan.jpg", "file_size": len(jpeg)}]})
@@ -58,14 +79,7 @@ def analyze(jpeg: bytes, tier: str = "hd", concerns: list[str] = CONCERNS) -> di
         data = _call(f"/task/skin-analysis/{task_id}")
         status = data.get("task_status") or data.get("status")
         if status == "success":
-            out = {}
-            for item in data["results"]["output"]:
-                # Skip the overall score, skin age and resized image, and the per-region pore and
-                # wrinkle scores: the trial tracks each concern over the whole face.
-                if "ui_score" not in item or item.get("region", "whole") != "whole":
-                    continue
-                name = item["type"].removeprefix("hd_")
-                out[name] = {"ui": item["ui_score"], "raw": item.get("raw_score", item["ui_score"])}
+            out = scores_from(data["results"]["output"])
             CACHE.mkdir(parents=True, exist_ok=True)
             hit.write_text(json.dumps(out))
             return out

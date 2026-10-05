@@ -6,6 +6,12 @@ small tilt, heavier JPEG compression, a closer framing, slight softness. The ski
 in every version, so any spread in a score is measurement noise. That spread becomes the
 population "capture noise" prior the app starts every trial with.
 
+Every edit stays inside what the app's photo check accepts (see src/quality.ts), so the
+spread is what a trial can still see after that check. An HD analysis of 9-12 concerns costs
+20 units, so each face gets three edits rather than all eight: one to the light, one to the
+framing and one to the camera, rotated across faces so every edit is seen on two or three.
+
+    python scripts/noise_study.py --dry-run    # how many new analyses a run would pay for
     python scripts/noise_study.py              # writes study/results.json and src/study.json
 """
 
@@ -19,7 +25,7 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from youcam import CONCERNS, analyze, to_jpeg  # noqa: E402
+from youcam import CONCERNS, analyze, cached, to_jpeg  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -77,15 +83,36 @@ EDITS = {
     "slightly soft focus": (soften(1.2), 92),
 }
 
+# (light, framing, camera) for the first, second, ... face; extra faces start over.
+ROTATION = [
+    ("15% darker", "tilted 3°", "heavier JPEG"),
+    ("warmer light", "closer framing", "slightly soft focus"),
+    ("15% brighter", "tilted 3°", "slightly soft focus"),
+    ("cooler light", "closer framing", "heavier JPEG"),
+    ("15% darker", "closer framing", "heavier JPEG"),
+    ("warmer light", "tilted 3°", "slightly soft focus"),
+]
+
+
+def edits_for(i: int) -> list[str]:
+    return ["as generated", *ROTATION[i % len(ROTATION)]]
+
 
 def main() -> None:
     faces = sorted((ROOT / "faces").glob("face_*.png"))
     if not faces:
         sys.exit("No faces in faces/ (run scripts/make_faces.sh first)")
+    if "--dry-run" in sys.argv:
+        new = 0
+        for i, face in enumerate(faces):
+            img = Image.open(face).convert("RGB")
+            new += sum(not cached(to_jpeg(EDITS[e][0](img), EDITS[e][1])) for e in edits_for(i))
+        sys.exit(f"{new} new analyses ({new * 20} units at the HD price for 9-12 concerns)")
     rows = []  # (face, edit, concern, score)
-    for face in faces:
+    for i, face in enumerate(faces):
         img = Image.open(face).convert("RGB")
-        for name, (edit, q) in EDITS.items():
+        for name in edits_for(i):
+            edit, q = EDITS[name]
             scores = analyze(to_jpeg(edit(img), q))
             for c, v in scores.items():
                 rows.append((face.stem, name, c, v["ui"]))
@@ -101,12 +128,15 @@ def main() -> None:
                 per_face.setdefault(f, {})[e] = s
         if not per_face:
             continue
-        variances = [statistics.pvariance(v.values()) for v in per_face.values() if len(v) > 1]
-        sd = math.sqrt(sum(variances) / len(variances))
+        # Pooled within-face SD: squared deviations from each face's own mean, over the
+        # degrees of freedom left after estimating those means.
+        groups = [list(v.values()) for v in per_face.values() if len(v) > 1]
+        ss = sum(sum((x - statistics.mean(g)) ** 2 for x in g) for g in groups)
+        sd = math.sqrt(ss / sum(len(g) - 1 for g in groups))
         by_edit = {}
         for e in EDITS:
             shifts = [v[e] - v["as generated"] for v in per_face.values() if e in v and "as generated" in v]
-            if shifts:
+            if shifts and e != "as generated":
                 by_edit[e] = round(statistics.mean(shifts), 2)
         for f, v in per_face.items():
             for e, s in v.items():
@@ -120,6 +150,7 @@ def main() -> None:
         "faces": len(faces),
         "scans": len({(f, e) for f, e, _, _ in rows}),
         "edits": [e for e in EDITS if e != "as generated"],
+        "facesPerEdit": {e: len({f for f, ee, _, _ in rows if ee == e}) for e in EDITS if e != "as generated"},
         "noise": noise,
         "rows": sorted(summary, key=lambda r: -r["capture"]),
         "naive": {k: naive[k] for k in ("concern", "before", "after", "edit")} if naive else None,
