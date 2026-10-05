@@ -7,7 +7,11 @@ also gets the kind of week-to-week variation real photos have (small exposure an
 balance drift, a slight tilt), so the example shows the noise a real trial has to see
 through. Every image is then scored by the real YouCam API.
 
-    python scripts/demo_trial.py faces/face_03.png      # writes src/demo.json
+One photo per sitting, as the app asks, and two missed check-ins (weeks 5 and 9), as real
+trials have: 3 baseline photos and 10 check-ins, 13 analyses (260 units).
+
+    python scripts/demo_trial.py faces/face_01.png --dry-run   # units a run would spend
+    python scripts/demo_trial.py faces/face_01.png             # writes src/demo.json
 """
 
 import json
@@ -22,10 +26,11 @@ from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from noise_study import _linear, _srgb, tilt  # noqa: E402
-from youcam import CONCERNS, analyze, to_jpeg  # noqa: E402
+from youcam import CONCERNS, analyze, cached, to_jpeg  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 START = datetime(2026, 7, 6, 8, 0, tzinfo=timezone.utc)
+MISSED = {5, 9}  # check-in weeks the example person skipped
 
 
 def calm_redness(img: Image.Image, strength: float) -> Image.Image:
@@ -57,16 +62,24 @@ def effect(week: int) -> float:
 
 
 def main() -> None:
-    face = Path(sys.argv[1] if len(sys.argv) > 1 else ROOT / "faces" / "face_01.png")
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    dry = "--dry-run" in sys.argv
+    face = Path(args[0] if args else ROOT / "faces" / "face_01.png")
     img = Image.open(face).convert("RGB")
     rng = random.Random(20261005)
     scans = []
+    new = 0
 
-    def sitting(at: datetime, phase: str, strength: float, photos: int = 2) -> None:
+    def sitting(at: datetime, phase: str, strength: float, photos: int = 1) -> None:
+        nonlocal new
         session = str(uuid.uuid4())
         for i in range(photos):
             shot, q = photo_variation(calm_redness(img, strength), rng)
-            res = analyze(to_jpeg(shot, q))
+            jpeg = to_jpeg(shot, q)
+            if dry:
+                new += not cached(jpeg)
+                continue
+            res = analyze(jpeg)
             scans.append({
                 "id": str(uuid.uuid4()), "takenAt": (at + timedelta(minutes=i)).isoformat().replace("+00:00", "Z"),
                 "sessionId": session, "phase": phase,
@@ -78,7 +91,10 @@ def main() -> None:
     for d in range(3):
         sitting(START - timedelta(days=6 - 2 * d), "baseline", 0.0)
     for week in range(1, 13):
-        sitting(START + timedelta(weeks=week), "trial", effect(week))
+        if week not in MISSED:
+            sitting(START + timedelta(weeks=week), "trial", effect(week))
+    if dry:
+        sys.exit(f"{new} new analyses ({new * 20} units at the HD price for 9-12 concerns)")
 
     trial = {
         "id": "demo",
@@ -90,8 +106,8 @@ def main() -> None:
             "targets": ["redness"],
             "tracked": ["redness"] + [c for c in CONCERNS if c != "redness"],
             "onsetWeeks": 4, "fairWeeks": 12, "earlyEffects": [], "tier": "hd",
-            "baseline": {"sessions": 3, "photosPerSession": 2},
-            "checkIn": {"everyDays": 7, "photosPerSession": 2},
+            "baseline": {"sessions": 3, "photosPerSession": 1},
+            "checkIn": {"everyDays": 7, "photosPerSession": 1},
             "startedAt": START.isoformat().replace("+00:00", "Z"),
             "verdictDue": (START + timedelta(weeks=12)).date().isoformat(),
             "rules": [],

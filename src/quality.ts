@@ -1,6 +1,11 @@
 // Photo checks that run on the device before anything is uploaded. They compare each new
 // photo with the first baseline photo, because a trial only works if the light and the
 // framing stay the same; the thresholds are where our perturbation study saw scores move.
+//
+// Sharpness is measured on a copy up to 1024 px, not the 256 px copy used for light: the
+// slight blur that raised texture scores by 9 points on average in the study keeps 85% of
+// its sharpness at 256 px, so a small copy cannot see it. At 1024 px it keeps 9-20%, while
+// the study's light, framing and JPEG edits stay at 87-112%.
 
 export interface Quality {
   width: number;
@@ -11,33 +16,56 @@ export interface Quality {
   warmth: number;
   /** Share of face-area pixels that are blown out or crushed. */
   clipped: number;
-  /** Variance of the Laplacian on a 256 px copy: higher is sharper. */
+  /** Variance of the Laplacian in the face oval of a copy up to 1024 px: higher is sharper. */
   sharpness: number;
 }
 
 export interface QualityIssue { code: "dark" | "bright" | "warm" | "cool" | "blur" | "clipped" | "small"; message: string }
 
-export const LIMITS = { lumaRatio: 0.15, warmth: 0.12, sharpRatio: 0.5, minSharp: 12, clipped: 0.04, minShort: 480 };
+export const LIMITS = { lumaRatio: 0.15, warmth: 0.12, sharpRatio: 0.5, minSharp: 5, clipped: 0.04, minShort: 480 };
 
-export function measure(img: CanvasImageSource, width: number, height: number): Quality {
-  // The face area: the central oval the capture screen asks people to fill.
-  const scale = 256 / Math.max(width, height);
+/** The face area: the central oval the capture screen asks people to fill. */
+function inFace(x: number, y: number, w: number, h: number): boolean {
+  return ((x - w / 2) / (w * 0.3)) ** 2 + ((y - h * 0.47) / (h * 0.36)) ** 2 <= 1;
+}
+
+function pixels(img: CanvasImageSource, width: number, height: number, side: number) {
+  const scale = Math.min(1, side / Math.max(width, height));
   const w = Math.max(1, Math.round(width * scale));
   const h = Math.max(1, Math.round(height * scale));
-  const canvas = new OffscreenCanvas(w, h);
-  const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
+  const ctx = new OffscreenCanvas(w, h).getContext("2d", { willReadFrequently: true })!;
   ctx.drawImage(img, 0, 0, w, h);
-  const { data } = ctx.getImageData(0, 0, w, h);
-  const cx = w / 2, cy = h * 0.47, rx = w * 0.3, ry = h * 0.36;
-  let n = 0, sumY = 0, sumR = 0, sumB = 0, clipped = 0;
+  return { data: ctx.getImageData(0, 0, w, h).data, w, h };
+}
+
+/** Variance of the Laplacian of luminance inside the face oval of an RGBA image. */
+export function sharpnessOf(data: ArrayLike<number>, w: number, h: number): number {
   const lum = new Float32Array(w * h);
+  for (let k = 0; k < w * h; k++) lum[k] = 0.2126 * data[k * 4] + 0.7152 * data[k * 4 + 1] + 0.0722 * data[k * 4 + 2];
+  let sum = 0, sq = 0, m = 0;
+  for (let y = 1; y < h - 1; y++) {
+    for (let x = 1; x < w - 1; x++) {
+      if (!inFace(x, y, w, h)) continue;
+      const k = y * w + x;
+      const lap = lum[k - 1] + lum[k + 1] + lum[k - w] + lum[k + w] - 4 * lum[k];
+      sum += lap;
+      sq += lap * lap;
+      m++;
+    }
+  }
+  const avg = sum / Math.max(m, 1);
+  return sq / Math.max(m, 1) - avg * avg;
+}
+
+export function measure(img: CanvasImageSource, width: number, height: number): Quality {
+  const { data, w, h } = pixels(img, width, height, 256);
+  let n = 0, sumY = 0, sumR = 0, sumB = 0, clipped = 0;
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
+      if (!inFace(x, y, w, h)) continue;
       const i = (y * w + x) * 4;
       const r = data[i], g = data[i + 1], b = data[i + 2];
       const Y = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-      lum[y * w + x] = Y;
-      if (((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 > 1) continue;
       n++;
       sumY += Y;
       sumR += r;
@@ -45,24 +73,14 @@ export function measure(img: CanvasImageSource, width: number, height: number): 
       if (Y > 250 || Y < 5) clipped++;
     }
   }
-  let lapSum = 0, lapSq = 0, m = 0;
-  for (let y = 1; y < h - 1; y++) {
-    for (let x = 1; x < w - 1; x++) {
-      const k = y * w + x;
-      const lap = lum[k - 1] + lum[k + 1] + lum[k - w] + lum[k + w] - 4 * lum[k];
-      lapSum += lap;
-      lapSq += lap * lap;
-      m++;
-    }
-  }
-  const lapMean = lapSum / Math.max(m, 1);
+  const big = pixels(img, width, height, 1024);
   return {
     width,
     height,
     luma: sumY / Math.max(n, 1),
     warmth: Math.log((sumR + 1) / (sumB + 1)),
     clipped: clipped / Math.max(n, 1),
-    sharpness: lapSq / Math.max(m, 1) - lapMean * lapMean,
+    sharpness: sharpnessOf(big.data, big.w, big.h),
   };
 }
 

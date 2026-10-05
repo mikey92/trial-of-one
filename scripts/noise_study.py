@@ -15,6 +15,7 @@ framing and one to the camera, rotated across faces so every edit is seen on two
     python scripts/noise_study.py              # writes study/results.json and src/study.json
 """
 
+import io
 import json
 import math
 import statistics
@@ -98,6 +99,42 @@ def edits_for(i: int) -> list[str]:
     return ["as generated", *ROTATION[i % len(ROTATION)]]
 
 
+# The app's photo check (measure() and compare() in src/quality.ts, same limits), so the
+# study can report the noise a trial is left with after it.
+LUMA_RATIO, WARMTH, SHARP_RATIO = 0.15, 0.12, 0.5
+
+
+def _face(w: int, h: int) -> np.ndarray:
+    yy, xx = np.mgrid[0:h, 0:w]
+    return ((xx - w / 2) / (w * 0.3)) ** 2 + ((yy - h * 0.47) / (h * 0.36)) ** 2 <= 1
+
+
+def _copy(img: Image.Image, side: int) -> np.ndarray:
+    s = min(1.0, side / max(img.size))
+    return np.asarray(img.resize((max(1, round(img.width * s)), max(1, round(img.height * s))), Image.BILINEAR), dtype=np.float64)
+
+
+def quality(img: Image.Image) -> dict:
+    a = _copy(img, 256)
+    face = _face(a.shape[1], a.shape[0])
+    r, g, b = a[..., 0][face], a[..., 1][face], a[..., 2][face]
+    big = _copy(img, 1024)
+    y = 0.2126 * big[..., 0] + 0.7152 * big[..., 1] + 0.0722 * big[..., 2]
+    lap = y[1:-1, :-2] + y[1:-1, 2:] + y[:-2, 1:-1] + y[2:, 1:-1] - 4 * y[1:-1, 1:-1]
+    inner = _face(big.shape[1], big.shape[0])[1:-1, 1:-1]
+    return {"luma": float((0.2126 * r + 0.7152 * g + 0.0722 * b).mean()),
+            "warmth": float(math.log((r.sum() + 1) / (b.sum() + 1))), "sharpness": float(lap[inner].var())}
+
+
+def passes(q: dict, ref: dict) -> bool:
+    return (abs(q["luma"] / ref["luma"] - 1) <= LUMA_RATIO and abs(q["warmth"] - ref["warmth"]) <= WARMTH
+            and q["sharpness"] >= ref["sharpness"] * SHARP_RATIO)
+
+
+def decoded(jpeg: bytes) -> Image.Image:
+    return Image.open(io.BytesIO(jpeg)).convert("RGB")
+
+
 def main() -> None:
     faces = sorted((ROOT / "faces").glob("face_*.png"))
     if not faces:
@@ -109,11 +146,18 @@ def main() -> None:
             new += sum(not cached(to_jpeg(EDITS[e][0](img), EDITS[e][1])) for e in edits_for(i))
         sys.exit(f"{new} new analyses ({new * 20} units at the HD price for 9-12 concerns)")
     rows = []  # (face, edit, concern, score)
+    rejected = set()  # (face, edit) photos the app's check would send back
     for i, face in enumerate(faces):
         img = Image.open(face).convert("RGB")
+        ref = None
         for name in edits_for(i):
             edit, q = EDITS[name]
-            scores = analyze(to_jpeg(edit(img), q))
+            jpeg = to_jpeg(edit(img), q)
+            scores = analyze(jpeg)
+            qual = quality(decoded(jpeg))
+            ref = ref or qual
+            if not passes(qual, ref):
+                rejected.add((face.stem, name))
             for c, v in scores.items():
                 rows.append((face.stem, name, c, v["ui"]))
             print(face.stem, name, {c: v["ui"] for c, v in scores.items()}, flush=True)
@@ -128,11 +172,8 @@ def main() -> None:
                 per_face.setdefault(f, {})[e] = s
         if not per_face:
             continue
-        # Pooled within-face SD: squared deviations from each face's own mean, over the
-        # degrees of freedom left after estimating those means.
-        groups = [list(v.values()) for v in per_face.values() if len(v) > 1]
-        ss = sum(sum((x - statistics.mean(g)) ** 2 for x in g) for g in groups)
-        sd = math.sqrt(ss / sum(len(g) - 1 for g in groups))
+        sd = pooled_sd(per_face.values())
+        kept = pooled_sd([{e: x for e, x in v.items() if (f, e) not in rejected} for f, v in per_face.items()])
         by_edit = {}
         for e in EDITS:
             shifts = [v[e] - v["as generated"] for v in per_face.values() if e in v and "as generated" in v]
@@ -143,23 +184,34 @@ def main() -> None:
                 gap = abs(s - v["as generated"])
                 if e != "as generated" and (naive is None or gap > naive["gap"]):
                     naive = {"concern": c, "before": v["as generated"], "after": s, "edit": e, "gap": gap, "face": f}
-        summary.append({"concern": c, "capture": round(sd, 2), "day": 3.0, "byEdit": by_edit})
-        noise[c] = {"capture": round(max(sd, 0.5), 2), "day": 3.0}
+        summary.append({"concern": c, "capture": round(kept, 2), "unchecked": round(sd, 2), "day": 3.0, "byEdit": by_edit})
+        noise[c] = {"capture": round(max(kept, 0.5), 2), "day": 3.0}
 
     out = {
         "faces": len(faces),
         "scans": len({(f, e) for f, e, _, _ in rows}),
         "edits": [e for e in EDITS if e != "as generated"],
         "facesPerEdit": {e: len({f for f, ee, _, _ in rows if ee == e}) for e in EDITS if e != "as generated"},
+        "rejected": sorted({e for _, e in rejected}),
         "noise": noise,
-        "rows": sorted(summary, key=lambda r: -r["capture"]),
+        "rows": sorted(summary, key=lambda r: -r["unchecked"]),
         "naive": {k: naive[k] for k in ("concern", "before", "after", "edit")} if naive else None,
     }
     (ROOT / "study").mkdir(exist_ok=True)
-    (ROOT / "study" / "results.json").write_text(json.dumps({"summary": out, "rows": rows}, indent=1))
+    (ROOT / "study" / "results.json").write_text(json.dumps({"summary": out, "rows": rows, "rejected": sorted(rejected)}, indent=1))
     (ROOT / "src" / "study.json").write_text(json.dumps(out, indent=1))
+    print("rejected by the photo check:", sorted(rejected))
     for r in out["rows"]:
-        print(f"{r['concern']:<12} SD {r['capture']:>5.2f}   one-photo MDC {1.96 * math.sqrt(2) * r['capture']:>5.1f}")
+        print(f"{r['concern']:<12} SD {r['capture']:>5.2f} (all edits {r['unchecked']:>5.2f})"
+              f"   one-photo MDC {1.96 * math.sqrt(2) * r['capture']:>5.1f}")
+
+
+def pooled_sd(faces) -> float:
+    """Pooled within-face SD: squared deviations from each face's own mean, over the degrees
+    of freedom left after estimating those means."""
+    groups = [list(v.values()) for v in faces if len(v) > 1]
+    ss = sum(sum((x - statistics.mean(g)) ** 2 for x in g) for g in groups)
+    return math.sqrt(ss / sum(len(g) - 1 for g in groups))
 
 
 if __name__ == "__main__":
