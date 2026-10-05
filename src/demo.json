@@ -82,7 +82,7 @@
     "height": 1344,
     "luma": 169.67134359145527,
     "warmth": 0.31007035499088,
-    "clipped": 5.562972852692479e-05,
+    "clipped": 0.00005562972852692479,
     "sharpness": 56.78643408972957
    }
   },
@@ -166,7 +166,7 @@
     "height": 1344,
     "luma": 173.70738531375167,
     "warmth": 0.3085342212622355,
-    "clipped": 5.562972852692479e-05,
+    "clipped": 0.00005562972852692479,
     "sharpness": 59.170152313517974
    }
   },
@@ -242,7 +242,7 @@
     "moisture": 84.19826030731201,
     "acne": 87.90840148925781,
     "texture": 99.15789473684211,
-    "pore": 100.0,
+    "pore": 100,
     "wrinkle": 89.62800025939941
    },
    "quality": {
@@ -326,7 +326,7 @@
     "moisture": 85.81032752990723,
     "acne": 87.90840148925781,
     "texture": 99.1842105263158,
-    "pore": 100.0,
+    "pore": 100,
     "wrinkle": 90.7099997997284
    },
    "quality": {
@@ -334,7 +334,7 @@
     "height": 1344,
     "luma": 169.587102458834,
     "warmth": 0.3147625391701192,
-    "clipped": 0.0,
+    "clipped": 0,
     "sharpness": 56.519218635578554
    }
   },
@@ -502,7 +502,7 @@
     "height": 1344,
     "luma": 175.67946257231864,
     "warmth": 0.3094821120997164,
-    "clipped": 5.562972852692479e-05,
+    "clipped": 0.00005562972852692479,
     "sharpness": 62.0063048567984
    }
   },
@@ -544,7 +544,7 @@
     "height": 1344,
     "luma": 171.0222086671117,
     "warmth": 0.3001481238124168,
-    "clipped": 5.562972852692479e-05,
+    "clipped": 0.00005562972852692479,
     "sharpness": 59.10265756378902
    }
   },
@@ -597,5 +597,11 @@
    "what": "slept badly / stressed"
   }
  ],
- "notes": []
+ "notes": [
+  {
+   "at": "2026-09-29T08:00:00.000Z",
+   "text": "Your week 12 check-in suggests the azelaic acid 15% serum is working for redness. The redness score improved by 11.5 points, which is more than the 4.6 points the photos can reliably show. That makes this a clear improvement compared with your baseline photos. Since the trial is complete, you can use this result as your personal reference for how your skin responded.",
+   "source": "model"
+  }
+ ]
 }
