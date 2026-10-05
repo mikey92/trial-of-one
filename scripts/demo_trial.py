@@ -1,11 +1,14 @@
 """Build the example trial shown at #/demo.
 
 One synthetic face goes through a simulated 12-week trial of an azelaic acid serum. The
-"effect" is an edit: cheek redness is reduced a little more each week (nothing happens in
-weeks 1-3, then a gradual change, the shape the azelaic acid trials report). Every photo
+"effect" is an edit: the flush on the cheeks fades a little more each week (nothing happens
+in weeks 1-3, then a gradual change, the shape the azelaic acid trials report). The edit
+only lowers the red-green (a*) channel where the cheeks are redder than the face's typical
+skin, so skin tone, lips and everything else stay as they were; at full strength it moved
+YouCam's redness score from 66 to 82 and no other score by more than a point. Every photo
 also gets the kind of week-to-week variation real photos have (small exposure and white
-balance drift, a slight tilt), so the example shows the noise a real trial has to see
-through. Every image is then scored by the real YouCam API.
+balance drift, a slight tilt, JPEG quality), so the example shows the noise a real trial has
+to see through. Every image is then scored by the real YouCam API.
 
 One photo per sitting, as the app asks, and two missed check-ins (weeks 5 and 9), as real
 trials have: 3 baseline photos and 10 check-ins, 13 analyses (260 units).
@@ -22,10 +25,10 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from noise_study import _linear, _srgb, tilt  # noqa: E402
+from noise_study import _linear, _srgb, decoded, quality, tilt  # noqa: E402
 from youcam import CONCERNS, analyze, cached, to_jpeg  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -33,17 +36,47 @@ START = datetime(2026, 7, 6, 8, 0, tzinfo=timezone.utc)
 MISSED = {5, 9}  # check-in weeks the example person skipped
 
 
+_M = np.array([[0.4124, 0.3576, 0.1805], [0.2126, 0.7152, 0.0722], [0.0193, 0.1192, 0.9505]])
+_WHITE = np.array([0.95047, 1.0, 1.08883])
+
+
+def _f(t):
+    return np.where(t > (6 / 29) ** 3, np.cbrt(t), t / (3 * (6 / 29) ** 2) + 4 / 29)
+
+
+def _finv(t):
+    return np.where(t > 6 / 29, t ** 3, 3 * (6 / 29) ** 2 * (t - 4 / 29))
+
+
+def _lab(lin: np.ndarray) -> np.ndarray:
+    xyz = lin @ _M.T / _WHITE
+    fx, fy, fz = _f(xyz[..., 0]), _f(xyz[..., 1]), _f(xyz[..., 2])
+    return np.stack([116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)], -1)
+
+
+def _linear_from_lab(lab: np.ndarray) -> np.ndarray:
+    fy = (lab[..., 0] + 16) / 116
+    xyz = np.stack([_finv(fy + lab[..., 1] / 500), _finv(fy), _finv(fy - lab[..., 2] / 200)], -1) * _WHITE
+    return xyz @ np.linalg.inv(_M).T
+
+
 def calm_redness(img: Image.Image, strength: float) -> Image.Image:
-    """Pull reddish skin towards its neighbourhood's neutral tone, weighted by how red it is."""
+    """Fade the cheek flush: lower a* towards the face's median skin a*, on the cheeks only."""
     if strength <= 0:
         return img
-    lin = _linear(img)
-    r, g, b = lin[..., 0], lin[..., 1], lin[..., 2]
-    redness = np.clip((r - (g + b) / 2) / (r + 1e-4) - 0.18, 0, None)  # skin is mildly red; flushed skin more so
-    w = np.clip(redness * 4, 0, 1)[..., None] * strength
-    target = lin.copy()
-    target[..., 0] = (g + b) / 2 + (r - (g + b) / 2) * 0.55
-    return _srgb(lin * (1 - w) + target * w)
+    w, h = img.size
+    lab = _lab(_linear(img))
+    yy, xx = np.mgrid[0:h, 0:w]
+    face = ((xx - w / 2) / (w * 0.3)) ** 2 + ((yy - h * 0.47) / (h * 0.36)) ** 2 <= 1
+    skin = np.median(lab[..., 1][face])
+    cheeks = np.zeros((h, w))
+    for cx in (0.285, 0.73):
+        cheeks = np.maximum(cheeks, ((((xx - cx * w) / (0.15 * w)) ** 2 + ((yy - 0.47 * h) / (0.11 * h)) ** 2) <= 1) * 1.0)
+    cheeks = np.asarray(Image.fromarray((cheeks * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(w * 0.03)),
+                        dtype=np.float64) / 255
+    excess = lab[..., 1] - skin
+    lab[..., 1] -= cheeks * np.clip(excess / 6, 0, 1) * strength * excess
+    return _srgb(_linear_from_lab(lab))
 
 
 def photo_variation(img: Image.Image, rng: random.Random) -> tuple[Image.Image, int]:
@@ -57,8 +90,8 @@ def photo_variation(img: Image.Image, rng: random.Random) -> tuple[Image.Image, 
 
 
 def effect(week: int) -> float:
-    """Simulated treatment effect: none until week 3, then rising to full strength by week 10."""
-    return float(np.clip((week - 3) / 7, 0, 1)) * 0.9
+    """Simulated treatment effect: none until week 3, then rising to its full strength by week 10."""
+    return float(np.clip((week - 3) / 7, 0, 1)) * 0.6
 
 
 def main() -> None:
@@ -84,7 +117,7 @@ def main() -> None:
                 "id": str(uuid.uuid4()), "takenAt": (at + timedelta(minutes=i)).isoformat().replace("+00:00", "Z"),
                 "sessionId": session, "phase": phase,
                 "scores": {c: v["ui"] for c, v in res.items()}, "raw": {c: v["raw"] for c, v in res.items()},
-                "quality": {"width": shot.width, "height": shot.height, "luma": 0, "warmth": 0, "clipped": 0, "sharpness": 100},
+                "quality": {"width": shot.width, "height": shot.height, **quality(decoded(jpeg))},
             })
             print(phase, at.date(), i, res.get("redness"), flush=True)
 

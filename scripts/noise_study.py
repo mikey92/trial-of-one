@@ -118,12 +118,13 @@ def quality(img: Image.Image) -> dict:
     a = _copy(img, 256)
     face = _face(a.shape[1], a.shape[0])
     r, g, b = a[..., 0][face], a[..., 1][face], a[..., 2][face]
+    luma = 0.2126 * r + 0.7152 * g + 0.0722 * b
     big = _copy(img, 1024)
     y = 0.2126 * big[..., 0] + 0.7152 * big[..., 1] + 0.0722 * big[..., 2]
     lap = y[1:-1, :-2] + y[1:-1, 2:] + y[:-2, 1:-1] + y[2:, 1:-1] - 4 * y[1:-1, 1:-1]
     inner = _face(big.shape[1], big.shape[0])[1:-1, 1:-1]
-    return {"luma": float((0.2126 * r + 0.7152 * g + 0.0722 * b).mean()),
-            "warmth": float(math.log((r.sum() + 1) / (b.sum() + 1))), "sharpness": float(lap[inner].var())}
+    return {"luma": float(luma.mean()), "warmth": float(math.log((r.sum() + 1) / (b.sum() + 1))),
+            "clipped": float(((luma > 250) | (luma < 5)).mean()), "sharpness": float(lap[inner].var())}
 
 
 def passes(q: dict, ref: dict) -> bool:
