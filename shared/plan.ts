@@ -64,8 +64,11 @@ export function buildPlan(input: PlanInput): TrialPlan {
     fairWeeks,
     earlyEffects: actives.flatMap((a) => a.earlyEffects ?? []),
     tier: input.tier ?? "hd",
-    baseline: { sessions: 3, photosPerSession: 2 },
-    checkIn: { everyDays: 7, photosPerSession: 2 },
+    // One photo per sitting: with the photo check in place, the study's capture noise is at
+    // most 1.8 points, so a second photo would shrink the smallest detectable change by under
+    // 7% and double the units every trial spends.
+    baseline: { sessions: 3, photosPerSession: 1 },
+    checkIn: { everyDays: 7, photosPerSession: 1 },
     startedAt: null,
     verdictDue: null,
     rules: PHOTO_RULES,

@@ -10,7 +10,7 @@
   // Analysis results by photo hash (same photo, same answer, no second unit) and the daily budget.
   "kv_namespaces": [{ "binding": "CACHE", "id": "REPLACE_WITH_KV_ID" }],
   "ratelimits": [
-    // Photos per visitor per minute: a sitting is two or three photos.
+    // Photos per visitor per minute: a sitting is one photo, plus a retake or two.
     { "name": "ANALYZE_LIMIT", "namespace_id": "5101", "simple": { "limit": 6, "period": 60 } },
     // Weekly notes written by the model per visitor per minute; past this, the template writes them.
     { "name": "NOTE_LIMIT", "namespace_id": "5102", "simple": { "limit": 6, "period": 60 } }

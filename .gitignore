@@ -6,6 +6,5 @@ dist/
 *.log
 .DS_Store
 .venv*/
-faces/*.png
 faces/perturbed/
-study/cache/
+study/cache/raw_*

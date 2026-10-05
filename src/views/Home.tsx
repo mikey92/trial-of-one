@@ -50,12 +50,12 @@ export function Home({ trials }: { trials: Trial[] }) {
             hydrator, days).
           </li>
           <li>
-            <strong>Baseline.</strong> Before the first use, take two photos on each of three days. That measures how
+            <strong>Baseline.</strong> Before the first use, take one photo on each of three days. That measures how
             much your scores wobble when nothing changes.
           </li>
           <li>
-            <strong>Check in weekly.</strong> Same window, same time, two photos. Each photo is checked for light and
-            focus against your baseline before it is scored.
+            <strong>Check in weekly.</strong> Same window, same time, one photo. It is checked for light and focus
+            against your baseline before it is scored, and sent back if it would not compare.
           </li>
           <li>
             <strong>Verdict.</strong> A score only counts as changed when it moves further than your own noise. You get
