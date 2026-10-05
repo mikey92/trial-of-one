@@ -60,6 +60,10 @@ def analyze(jpeg: bytes, tier: str = "hd", concerns: list[str] = CONCERNS) -> di
         if status == "success":
             out = {}
             for item in data["results"]["output"]:
+                # Skip the overall score, skin age and resized image, and the per-region pore and
+                # wrinkle scores: the trial tracks each concern over the whole face.
+                if "ui_score" not in item or item.get("region", "whole") != "whole":
+                    continue
                 name = item["type"].removeprefix("hd_")
                 out[name] = {"ui": item["ui_score"], "raw": item.get("raw_score", item["ui_score"])}
             CACHE.mkdir(parents=True, exist_ok=True)

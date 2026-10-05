@@ -81,7 +81,8 @@ export function parseScores(results: any): Analysis["scores"] {
   const list: any[] = Array.isArray(results?.output) ? results.output : Array.isArray(results) ? results : [];
   for (const item of list) {
     const id = concernFromAction(String(item.type ?? ""));
-    if (!id || typeof item.ui_score !== "number") continue;
+    // Pores and wrinkles also come per face region (forehead, cheek, ...); the trial tracks the whole face.
+    if (!id || typeof item.ui_score !== "number" || (item.region && item.region !== "whole")) continue;
     out[id] = { ui: item.ui_score, raw: typeof item.raw_score === "number" ? item.raw_score : item.ui_score, mask: item.mask_urls?.[0] };
   }
   return out;
