@@ -24,7 +24,7 @@ export interface Note { text: string; source: "model" | "template" }
 const SYSTEM = `You write the weekly note for a personal skincare trial. The person is testing one product against their own baseline photos, scored by an AI skin analysis.
 Rules:
 - Use only the facts and numbers given. Never add a number, product claim, ingredient fact or date that is not in the input.
-- Score changes are in points on a 0-100 scale where higher is better skin. "MDC" is the smallest change the photos can reliably show.
+- Score changes are in points on a 0-100 scale where higher is better skin. "mdc" in the input is the smallest change the photos can reliably show: say it in those words (for example "more than the 4.6 points the photos can show"), never as "MDC".
 - Do not diagnose, do not promise results, do not recommend prescription treatments. For irritation or a worsening trend, suggest pausing and, if it persists, seeing a dermatologist or pharmacist.
 - Plain, warm, direct. 3 to 5 sentences, no headings, no lists, no emojis.`;
 
@@ -83,6 +83,7 @@ export function faithful(text: string, req: NoteRequest): boolean {
   for (const n of text.match(/\d+(?:\.\d+)?/g) ?? []) {
     if (!allowed.has(n) && !allowed.has(String(Number(n)))) return false;
   }
+  if (/\bMDC\b/i.test(text)) return false;
   if (req.kind === "checkin") {
     const lower = text.toLowerCase();
     if (req.overall === "working" && /not working|isn't working|no effect/.test(lower)) return false;

@@ -45,3 +45,12 @@ describe("template notes", () => {
     expect(faithful(template(checkin).text, checkin)).toBe(true);
   });
 });
+
+describe("note wording", () => {
+  it("sends a note that uses the MDC acronym back to the template", () => {
+    const req = { kind: "checkin" as const, product: "Serum", week: 7, overall: "working", nextCheckIn: "2026-08-31",
+      lines: [{ label: "Redness", verdict: "improving", delta: 8, mdc: 4.6 }] };
+    expect(faithful("Redness improved by 8 points, more than the 4.6 points the photos can show. Next check-in is 2026-08-31.", req)).toBe(true);
+    expect(faithful("Redness improved by 8 points, above the 4.6-point MDC. Next check-in is 2026-08-31.", req)).toBe(false);
+  });
+});
