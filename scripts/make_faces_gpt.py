@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Synthetic faces from GPT image generation, through the ChatGPT-plan relay the app's notes use:
+"""Synthetic faces from GPT image generation, through the same Responses relay the app's notes use:
 the prompts in faces.txt, for any face_NN.png still missing (the FLUX Space has a daily quota).
 GPT images are 1024x1536, so each is enlarged by 6% to 1088x1632 to reach the HD concerns'
 1080 px short side. No real person is photographed or analysed anywhere in this project.
