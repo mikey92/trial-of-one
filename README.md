@@ -6,6 +6,9 @@ change real when it is bigger than the noise in your own photos.
 
 Built for the YouCam API Skin AI & eCommerce VTO Hackathon.
 
+**Try it:** https://trial-of-one.mikey9220.workers.dev (the finished example trial is at
+`#/demo`, the noise study at `#/study`) · **Demo video (2:32):** https://youtu.be/FxMY1DHc4Ms
+
 ## The problem
 
 People start a serum and, weeks later, stand in front of the mirror trying to decide whether
