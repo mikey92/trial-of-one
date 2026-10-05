@@ -46,7 +46,23 @@ The demo is a real 12-week replay: a synthetic face whose cheek flush fades from
 ## Challenges
 
 - A trial only works if the photos compare, so most of the engineering went into the photo, not the model: the on-device light and focus checks, the session design, and the noise model.
-- Deciding when *not* to give an answer. "Too early, fair from 28 November" is the most common verdict in the first weeks, and the most useful one.
+- Deciding when *not* to give an answer. "Too early, fair from (a date)" is the most common verdict in the first weeks, and the most useful one.
+- A budget of 1,000 analysis units. Every analysis is priced by tier and concern count (20 units for 12 HD concerns), so the study was designed to fit: three rotated edits per face instead of all eight, cached results, and a dry run that prints the units a script would spend.
+
+## Accomplishments that we're proud of
+
+- The noise study changed the product three times: it found a bug in our own focus check, it set the protocol (one photo per sitting), and it sets every trial's noise floor.
+- The example trial is made of real YouCam scores, and a test replays it week by week, so the verdicts in the demo are the ones the code gives.
+- The weekly note can explain but never overrule the statistics.
+
+## What we learned
+
+- YouCam's scores are repeatable: the same photo, sent again through the live app, came back identical on all twelve concerns. So all of the noise a trial has to see through comes from the photo, which is exactly why the photo protocol is worth engineering.
+- Colour-based concerns (redness, dark circles, radiance) barely move with capture changes; texture-based ones (texture, pores, breakouts) react to focus and compression. A trial needs different evidence for each.
+
+## Try it
+
+https://trial-of-one.mikey9220.workers.dev: the finished example trial (`#/demo`) and the noise study (`#/study`) need nothing. To score your own photos, plan a trial and take or upload a frontal photo with at least 1080 px on the short side. Each analysis spends the hackathon's API units, so new scans are capped per day.
 
 ## What's next
 
